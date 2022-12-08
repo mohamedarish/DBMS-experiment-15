@@ -18,6 +18,9 @@ model Hotel {
 
 model Employee {
     employeeId Int    @id
+    position   String
+    email      String
+    password   String
     name       String
     gender     String
     address    String

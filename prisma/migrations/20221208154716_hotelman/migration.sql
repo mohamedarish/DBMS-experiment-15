@@ -10,6 +10,9 @@ CREATE TABLE "Hotel" (
 -- CreateTable
 CREATE TABLE "Employee" (
     "employeeId" INTEGER NOT NULL,
+    "position" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "address" TEXT NOT NULL,

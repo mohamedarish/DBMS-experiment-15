@@ -16,11 +16,11 @@
         </li>
         <li>
           <!-- Only show this if the checkbox above is selected -->
-          <label for="hotel">Enter the name of the hotel you manage</label>
+          <label for="hotel"> Enter the name of the hotel you manage </label>
           <input type="text" name="hotel" id="hotel" />
         </li>
         <li>
-          <label for="phone">phone number</label>
+          <label for="phone"> phone number </label>
           <input type="tel" name="phone" id="phone" />
         </li>
         <li>
