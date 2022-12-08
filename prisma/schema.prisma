@@ -13,6 +13,7 @@ model Hotel {
     location String
     Employee Employee[]
     Room     Room[]
+    User     User[]
 }
 
 model Employee {
@@ -35,12 +36,15 @@ model Room {
 }
 
 model User {
-    userID   Int    @id @default(autoincrement())
+    userID   Int     @id @default(autoincrement())
+    manager  Boolean
+    hotelID  Int?
     name     String
     phoneNo  String
     email    String
     password String
     Bill     Bill[]
+    hotel    Hotel?  @relation(fields: [hotelID], references: [hotelID])
 }
 
 model Bill {

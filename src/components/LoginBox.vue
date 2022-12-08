@@ -25,4 +25,8 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="scss">
+ul {
+  list-style-type: none;
+}
+</style>
