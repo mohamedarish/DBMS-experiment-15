@@ -11,17 +11,16 @@
           <input type="text" name="fullname" id="fullname" />
         </li>
         <li>
-          <label for="managerb"> Are you a manager? </label>
-          <input type="checkbox" name="managerb" id="managerb" />
-        </li>
-        <li>
-          <!-- Only show this if the checkbox above is selected -->
-          <label for="hotel"> Enter the name of the hotel you manage </label>
-          <input type="text" name="hotel" id="hotel" />
+          <label for="dob"> DOB </label>
+          <input type="date" name="DOB" id="DOB" />
         </li>
         <li>
           <label for="phone"> phone number </label>
           <input type="tel" name="phone" id="phone" />
+        </li>
+        <li>
+          <label for="address"> Address </label>
+          <input type="tel" name="address" id="address" />
         </li>
         <li>
           <label for="password"> password </label>

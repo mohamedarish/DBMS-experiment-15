@@ -1,17 +1,17 @@
 <template>
   <div class="home">
-    <RegisterEmployeeVue />
+    <AddRoomVue />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import RegisterEmployeeVue from "@/components/RegisterEmployee.vue";
+import AddRoomVue from "@/components/AddRoom.vue";
 
 export default defineComponent({
-  name: "UserRegister",
+  name: "LoginView",
   components: {
-    RegisterEmployeeVue,
+    AddRoomVue,
   },
 });
 </script>
