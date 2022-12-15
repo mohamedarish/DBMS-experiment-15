@@ -11,6 +11,10 @@
           <input type="text" name="address" id="address" />
         </li>
         <li>
+          <label for="password"> Password </label>
+          <input type="password" name="password" id="password" />
+        </li>
+        <li>
           <button type="submit">register</button>
         </li>
       </ul>
