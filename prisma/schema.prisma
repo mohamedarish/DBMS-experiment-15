@@ -15,6 +15,7 @@ model Customer {
     DOB        DateTime
     Review     Review[]
     Booking    Booking[]
+    Room       Room[]
 }
 
 model Booking {
@@ -50,10 +51,12 @@ model Room {
     price       Int
     type        String
     booked      Boolean
+    bookedBy    Int?
     hotelNo     Int
     hotel       Hotel     @relation(fields: [hotelNo], references: [hotelID])
     Review      Review[]
     Booking     Booking[]
+    user        Customer? @relation(fields: [bookedBy], references: [customerID])
 }
 
 model Review {
