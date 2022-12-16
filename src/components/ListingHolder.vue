@@ -2,7 +2,6 @@
     <!-- is this rendering -->
     <div v-for="room in listings" :key="room">
         <SingleListing :roomInfo="room" />
-        ___
     </div>
 </template>
 
@@ -13,6 +12,7 @@ export default defineComponent({
     setup() {
         const listings = ref([
             {
+                id: 12,
                 name: "Aussie-innit",
                 description: "It's australia innit?",
                 price: "6 pesos",
@@ -20,8 +20,9 @@ export default defineComponent({
                 address: "New Zealand",
             },
             {
-                name: "French🤮-innit",
-                description: "It's France🤮 innit?",
+                id: 1979,
+                name: "French🤢",
+                description: "It's France🤮 baguette?",
                 price: "-6 rubies",
                 type: "MultiCuisine",
                 address: "France 🤮🤮🤮",
