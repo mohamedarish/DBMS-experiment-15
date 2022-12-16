@@ -1,7 +1,12 @@
 <template>
     <!-- is this rendering -->
-    <div v-for="room in listings" :key="room">
-        <SingleListing :roomInfo="room" />
+    <div v-if="listings.length < 1">
+        No Listings Currently Available
+    </div>
+    <div v-else>
+        <div v-for="room in listings" :key="room">
+            <SingleListing :roomInfo="room" :booked="false" />
+        </div>
     </div>
 </template>
 

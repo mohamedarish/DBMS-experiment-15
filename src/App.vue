@@ -6,7 +6,8 @@
         <router-link to="/addroom">AddRoom</router-link> |
         <router-link to="/loginhotel">LoginHotel</router-link> |
         <router-link to="/registerhotel">RegisterHotel</router-link> |
-        <router-link to="/allrooms">AllRooms</router-link>
+        <router-link to="/allrooms">AllRooms</router-link> |
+        <router-link to="/bookings">Booked</router-link>
     </nav>
     <router-view/>
 </template>
