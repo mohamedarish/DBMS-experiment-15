@@ -9,12 +9,29 @@
             <button @click="triggerPopUp()">Book Now</button>
         </div>
         <div v-else>
-            <h3 class="heading">{{ roomInfo.name }}</h3>
-            <p class="description">{{ roomInfo.descriptiom }}</p>
-            <h3 class="price">{{ roomInfo.price }}</h3>
-            <p class="type">{{ roomInfo.type }}</p>
-            <p class="address">{{ roomInfo.address }}</p>
-            <button @click="triggerPopUp()">Cancel</button>
+            <div v-if="!leaveReview">
+                <h3 class="heading">{{ roomInfo.name }}</h3>
+                <p class="description">{{ roomInfo.descriptiom }}</p>
+                <h3 class="price">{{ roomInfo.price }}</h3>
+                <p class="type">{{ roomInfo.type }}</p>
+                <p class="address">{{ roomInfo.address }}</p>
+                <button @click="triggerPopUp()">Cancel</button>
+                <button @click="triggerReview()">Add a review</button>
+            </div>
+            <div v-else>
+                <div class="rating">
+                    <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                    <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                </div>
+                <label for="details">Details</label>
+                <input type="text" name="details" id="details" placeholder="(optional)"/>
+
+                <button @click="triggerReview()">Submit</button>
+                <button @click="triggerReview()">Cancel</button>
+            </div>
         </div>
     </div>
     <div class="confirmation" v-else>
@@ -30,7 +47,6 @@
         <div v-else>
             <button @click="triggerPopUp()">Confirm Cancellation</button>
         </div>
-
     </div>
 </template>
 
@@ -40,15 +56,21 @@ export default defineComponent({
     props: ["roomInfo", "booked"],
     setup() {
         const makePopupAppear = ref(false);
+        const leaveReview = ref(false);
 
         const triggerPopUp = ref(() => {
-            console.log("triggered a flip");
             makePopupAppear.value = !makePopupAppear.value;
+        })
+
+        const triggerReview = ref(() => {
+            leaveReview.value = !leaveReview.value;
         })
 
         return {
             makePopupAppear,
             triggerPopUp,
+            leaveReview,
+            triggerReview,
         }
     },
     name: "SingleListing",
@@ -56,7 +78,37 @@ export default defineComponent({
 </script>
 
 <style>
-.listing, .confirmation {
-    border: 5px solid #42b983;
+.rating {
+display: flex;
+flex-direction: row-reverse;
+justify-content: center;
 }
+
+
+.rating > input{ display:none;}
+
+.rating > label {
+position: relative;
+width: 1.1em;
+font-size: 1.5vw;
+color: #FFD700;
+cursor: pointer;
+}
+
+.rating > label::before{
+content: "\2605";
+position: absolute;
+opacity: 0;
+}
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before {
+opacity: 1 !important;
+}
+
+.rating > input:checked ~ label:before{
+opacity:1;
+}
+
+.rating:hover > input:checked ~ label:before{ opacity: 0.4; }
 </style>
