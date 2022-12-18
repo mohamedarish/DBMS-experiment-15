@@ -36,7 +36,6 @@ nav {
     justify-content: space-between;
     background: #82500a;
     padding: 20px;
-    margin-bottom: 20px;
     height: 64px;
 
     .state-login {
