@@ -7,7 +7,8 @@
         <router-link to="/loginhotel">LoginHotel</router-link> |
         <router-link to="/registerhotel">RegisterHotel</router-link> |
         <router-link to="/allrooms">AllRooms</router-link> |
-        <router-link to="/bookings">Booked</router-link>
+        <router-link to="/bookings">Booked</router-link> |
+        <router-link to="/mylistings">MyListings</router-link>
     </nav>
     <router-view/>
 </template>
@@ -22,12 +23,15 @@
 }
 
 nav {
-    padding: 30px;
+    background: #82500a;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 nav a {
     font-weight: bold;
-    color: #2c3e50;
+    color: #ebeff4;
+    text-decoration: none;
 }
 
 nav a.router-link-exact-active {

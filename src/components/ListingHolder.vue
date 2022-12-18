@@ -5,7 +5,7 @@
     </div>
     <div v-else>
         <div v-for="room in listings" :key="room">
-            <SingleListing :roomInfo="room" :booked="false" />
+            <SingleListing :roomInfo="room" :booked="false" :manager="false"/>
         </div>
     </div>
 </template>

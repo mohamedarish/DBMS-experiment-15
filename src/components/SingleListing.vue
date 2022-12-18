@@ -1,6 +1,6 @@
 <template>
     <div class="listing" v-if="!makePopupAppear">
-        <div v-if="!booked">
+        <div v-if="!booked && !manager">
             <h3 class="heading">{{ roomInfo.name }}</h3>
             <p class="description">{{ roomInfo.descriptiom }}</p>
             <h3 class="price">{{ roomInfo.price }}</h3>
@@ -8,7 +8,7 @@
             <p class="address">{{ roomInfo.address }}</p>
             <button @click="triggerPopUp()">Book Now</button>
         </div>
-        <div v-else>
+        <div v-else-if="!manager">
             <div v-if="!leaveReview">
                 <h3 class="heading">{{ roomInfo.name }}</h3>
                 <p class="description">{{ roomInfo.descriptiom }}</p>
@@ -33,6 +33,19 @@
                 <button @click="triggerReview()">Cancel</button>
             </div>
         </div>
+        <div v-else>
+            <div v-if="!confirmRemove">
+                <p class="description">{{ roomInfo.descriptiom }}</p>
+                <h3 class="price">{{ roomInfo.price }}</h3>
+                <p class="type">{{ roomInfo.type }}</p>
+                <p class="address">{{ roomInfo.address }}</p>
+                <button @click="triggerConfirm">Remove Listing</button>
+            </div>
+            <div v-else>
+                <p class="id">{{ roomInfo.id }}</p>
+                <button @click="triggerConfirm">I am Sure</button>
+            </div>
+        </div>
     </div>
     <div class="confirmation" v-else>
         <p class="id">{{ roomInfo.id }}</p>
@@ -53,10 +66,11 @@
 <script>
 import { defineComponent, ref } from 'vue';
 export default defineComponent({
-    props: ["roomInfo", "booked"],
+    props: ["roomInfo", "booked", "manager"],
     setup() {
         const makePopupAppear = ref(false);
         const leaveReview = ref(false);
+        const confirmRemove = ref(false);
 
         const triggerPopUp = ref(() => {
             makePopupAppear.value = !makePopupAppear.value;
@@ -66,11 +80,17 @@ export default defineComponent({
             leaveReview.value = !leaveReview.value;
         })
 
+        const triggerConfirm = ref(() => {
+            confirmRemove.value = !confirmRemove.value;
+        })
+
         return {
             makePopupAppear,
             triggerPopUp,
             leaveReview,
             triggerReview,
+            confirmRemove,
+            triggerConfirm
         }
     },
     name: "SingleListing",

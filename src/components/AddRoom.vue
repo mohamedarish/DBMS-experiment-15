@@ -15,10 +15,6 @@
                     <input type="number" name="roomp" id="roomp" />
                 </li>
                 <li>
-                    <label for="password"> Password </label>
-                    <input type="password" name="password" id="password" />
-                </li>
-                <li>
                     <button type="submit">submit</button>
                 </li>
             </ul>

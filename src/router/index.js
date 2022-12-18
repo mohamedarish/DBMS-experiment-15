@@ -7,6 +7,7 @@ import OldHotelView from "../views/OldHotelView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import ListingsView from "../views/ListingsView.vue";
 import BookedView from "../views/BookedView.vue";
+import ListedRooms from "../views/ListedRooms.vue";
 
 const routes = [
     {
@@ -48,6 +49,11 @@ const routes = [
         path: "/bookings",
         name: "bookings",
         component: BookedView,
+    },
+    {
+        path: "/mylistings",
+        name: "mylistings",
+        component: ListedRooms,
     },
 ];
 
