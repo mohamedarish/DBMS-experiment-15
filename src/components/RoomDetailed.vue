@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="roomDetails">
         <div class="image-holders">
             <img src="https://a0.muscache.com/im/pictures/miso/Hosting-722179355353877964/original/0c5adc5c-5351-4726-9275-0325a2183e1a.jpeg" class="main-image" />
             <div class="sub-holder">
@@ -33,7 +33,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.home {
+.roomDetails {
     height: 100vh;
     display: flex;
     flex-direction: column;
