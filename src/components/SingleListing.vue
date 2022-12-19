@@ -97,7 +97,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
 .rating {
 display: flex;
 flex-direction: row-reverse;

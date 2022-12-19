@@ -10,7 +10,6 @@ datasource db {
 model Customer {
     customerID Int       @id @default(autoincrement())
     name       String
-    phoneNo    String
     address    String
     DOB        DateTime
     Review     Review[]

@@ -29,8 +29,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
-ul {
-    list-style-type: none;
-}
+<style lang="scss" scoped>
+
+
 </style>
