@@ -8,8 +8,8 @@
             <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
             <input type="submit" id="login" value="Login"/>
 
-                <p>New to this site? <a href="">SignUp</a></p>
-                <p>Customer? <a href="">User Login</a></p>
+                <p>New to this site? <a href="./registerhotel">SignUp</a></p>
+                <p>Customer? <a href="./login">User Login</a></p>
         </form>
     </div>
 </template>

@@ -9,6 +9,7 @@ datasource db {
 
 model Customer {
     customerID Int       @id @default(autoincrement())
+    email      String
     name       String
     address    String
     DOB        DateTime
@@ -37,6 +38,7 @@ model Bill {
 
 model Hotel {
     hotelID  Int    @id @default(autoincrement())
+    email    String
     name     String
     address  String
     password String

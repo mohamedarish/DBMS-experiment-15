@@ -8,8 +8,8 @@
             <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
             <input type="submit" id="login" value="Login"/>
 
-                <p>New to this site? <a href="">SignUp</a></p>
-                <p>Hotel Manager? <a href="">Hotel Login</a></p>
+            <p>New to this site? <a href="./register">SignUp</a></p>
+            <p>Hotel Manager? <a href="./loginhotel">Hotel Login</a></p>
         </form>
     </div>
 </template>
@@ -64,7 +64,7 @@ export default defineComponent({
         justify-content: center;
         align-items: center;
 
-        p:nth-last-child(2) {
+        p:nth-last-of-type(2) {
             margin-top: 12px;
         }
 
