@@ -22,7 +22,8 @@ export default defineComponent({
                 price: "6 pesos",
                 type: "Single Mouse",
                 address: "New Zealand",
-                rating: 1,
+                rating: 4,
+                number_of_reviews: 2,
                 images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
             },
             {
@@ -33,6 +34,7 @@ export default defineComponent({
                 type: "Triple Mouse",
                 address: "Australia",
                 rating: 1,
+                number_of_reviews: 5,
                 images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
             }
         ]);

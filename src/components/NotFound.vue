@@ -7,15 +7,17 @@
             404 Not Found
         </div>
         <div class="link">
-            Go Back <a href="./">Home?</a>
+            Go Back <RouterLink href="./">Home?</RouterLink>
         </div>
     </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import { RouterLink } from 'vue-router';
 export default defineComponent({
-    name: "NotFound"
+    name: "NotFound",
+    components: { RouterLink }
 })
 </script>
 

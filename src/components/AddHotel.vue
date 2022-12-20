@@ -2,29 +2,31 @@
     <div class="login">
         <form>
             <p>Email</p>
-            <input type="email" name="email" id="email" placeholder="john@hotel.com" required/>
+            <input type="email" name="email" id="email" placeholder="john@hotel.com" class="userInfo" required/>
             <p>Hotel Name</p>
-            <input type="text" name="hotelname" id="hotelname" placeholder="HotelName" required/>
+            <input type="text" name="hotelname" id="hotelname" placeholder="HotelName" class="userInfo" required/>
             <p>Address</p>
-            <textarea name="address" id="address" cols="5" rows="20" placeholder="Hotel
+            <textarea name="address" id="address" cols="5" rows="20" class="userInfo" placeholder="Hotel
 street
-city" />
+city" required/>
             <p>Password</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" required/>
+            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" class="userInfo" required/>
             <input type="checkbox" name="showPass" id="showPass"  :checked="passwordView" @input="triggerPass()" />
             <p>Confirm Password</p>
-            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" required/>
+            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required/>
             <input type="checkbox" name="showConf" id="showConf" :checked="confirmView" @input="triggerConf()" />
             <input type="submit" id="register" value="Register" />
-            <p>Have an account? <a href="./loginhotel">Sign In</a></p>
-            <p>New Customer? <a href="./register">Sign Up</a></p>
+            <p>Have an account? <RouterLink to="./loginhotel">Sign In</RouterLink></p>
+            <p>New Customer? <RouterLink to="./register">Sign Up</RouterLink></p>
         </form>
     </div>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
+import { RouterLink } from "vue-router";
 export default defineComponent({
+    components: { RouterLink },
     name: "AddHotel",
     setup() {
         const passwordView = ref(false);
@@ -112,7 +114,7 @@ export default defineComponent({
             }
         }
 
-        #email, #password, #hotelname, #confirmp, #address {
+        .userInfo {
             padding: 5px;
             background-color: #eee;
             border: none;
@@ -129,7 +131,7 @@ export default defineComponent({
             height: 13.5%;
         }
 
-        #name:focus, #password:focus, #fullname:focus, #DOB:focus, #confirmp:focus, #address:focus {
+        .userInfo:focus {
             border-bottom: solid #555 0.4px;
             transition: all 0.5s ease-in-out;
             background: #ddd;

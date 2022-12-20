@@ -4,8 +4,8 @@
         <div class="details-holder">
             <div class="name-rating">
                 <div class="hotel-name">{{ roomInfo.name }}</div>
-                <div class="rating">
-                    {{ roomDetails.rating }} ★ <p>x reviews</p>
+                <div class="rating" :id="roomInfo.id">
+                    {{ roomInfo.rating }} ★ <p>{{ roomInfo.number_of_reviews ? roomInfo.number_of_reviews : "no" }} reviews</p>
                 </div>
             </div>
             <div class="type-address">
@@ -28,9 +28,6 @@ export default defineComponent({
         const makePopupAppear = ref(false);
         const leaveReview = ref(false);
         const confirmRemove = ref(false);
-        console.log(props.roomInfo);
-        const roomDetails = ref(props.roomInfo);
-        console.log(roomDetails.value);
 
         const triggerPopUp = ref(() => {
             makePopupAppear.value = !makePopupAppear.value;
@@ -47,10 +44,23 @@ export default defineComponent({
 
         onMounted(() => {
             const img_holder = ref(document.querySelectorAll(".main-image"));
+            const rating_box = ref(document.querySelectorAll(".rating"));
 
             img_holder.value.forEach(entry => {
                 if (entry.id.includes(props.roomInfo.id.toString())) {
                     entry.style.backgroundImage = `url("${ props.roomInfo.images[0] }")`
+                }
+            })
+
+            rating_box.value.forEach(entry => {
+                if (entry.id.includes(props.roomInfo.id.toString())) {
+                    if (props.roomInfo.rating > 3) {
+                        entry.style.backgroundColor = "green";
+                    } else if (props.roomInfo.rating > 2) {
+                        entry.style.backgroundColor = "yellow";
+                    } else {
+                        entry.style.backgroundColor = "red";
+                    }
                 }
             })
         });
@@ -62,7 +72,6 @@ export default defineComponent({
             triggerReview,
             confirmRemove,
             triggerConfirm,
-            roomDetails
         }
 
     },
@@ -142,7 +151,7 @@ export default defineComponent({
             }
 
             .book {
-                background: #82500A;
+                background-color: #82500A;
                 color: #fff;
                 padding: 7px;
                 border: none;

@@ -2,21 +2,23 @@
     <div class="login">
         <form>
             <p>Email</p>
-            <input type="email" name="name" id="name" placeholder="john@hotel.com" required />
+            <input type="email" name="name" id="name" placeholder="john@hotel.com" class="userInfo" required />
             <p>password:</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" required/>
+            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" class="userInfo" required/>
             <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
             <input type="submit" id="login" value="Login"/>
 
-                <p>New to this site? <a href="./registerhotel">SignUp</a></p>
-                <p>Customer? <a href="./login">User Login</a></p>
+            <p>New to this site? <RouterLink to="./register">SignUp</RouterLink></p>
+            <p>Customer? <RouterLink to="./login">User Login</RouterLink></p>
         </form>
     </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
+import { RouterLink } from "vue-router";
 export default defineComponent({
+    components: {RouterLink},
     name: "HotelLogin",
     setup() {
         const checkboxState = ref(false);
@@ -88,7 +90,7 @@ export default defineComponent({
             }
         }
 
-        #name, #password {
+        .userInfo {
             background-color: #eee;
             border: none;
             border-bottom: solid #777 0.2px;
@@ -100,7 +102,7 @@ export default defineComponent({
             margin-bottom: 9px;
         }
 
-        #name:focus, #password:focus {
+        .userInfo:focus {
             border-bottom: solid #555 0.4px;
             transition: all 0.5s ease-in-out;
             background: #ddd;

@@ -2,30 +2,31 @@
     <div class="login">
         <form>
             <p>Email</p>
-            <input type="email" name="email" id="email" placeholder="john@doe.com" required/>
+            <input type="email" name="email" id="email" placeholder="john@doe.com" class="userInfo" required/>
             <p>Full Name</p>
-            <input type="text" name="fullname" id="fullname" placeholder="John Doe" required/>
+            <input type="text" name="fullname" id="fullname" placeholder="John Doe" class="userInfo" required/>
             <p>Date of Birth</p>
-            <input type="date" name="DOB" id="DOB" required/>
+            <input type="date" name="DOB" id="DOB" class="userInfo" required/>
             <p>Address</p>
-            <textarea name="address" id="address" cols="5" rows="20" placeholder="House
+            <textarea name="address" id="address" cols="5" rows="20" class="userInfo" placeholder="House
 street
-city" />
+city" required/>
             <p>Password</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" required/>
+            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" class="userInfo" required/>
             <input type="checkbox" name="showPass" id="showPass" :checked="passwordView" @input="triggerPass()" />
             <p>Confirm Password</p>
-            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" required/>
+            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required/>
             <input type="checkbox" name="showConf" id="showConf" :checked="confirmView" @input="triggerConf()" />
             <input type="submit" id="register" value="Register" />
-            <p>Have an account? <a href="./login">Sign In</a></p>
-            <p>Manage a Hotel? <a href="./registerhotel">Hotel Sign Up</a></p>
+            <p>Have an account? <RouterLink to="./login">Sign In</RouterLink></p>
+            <p>Manage a Hotel? <RouterLink to="./registerhotel">Hotel Sign Up</RouterLink></p>
         </form>
     </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
+import { RouterLink } from "vue-router";
 export default defineComponent({
     name: "LoginBox",
     setup() {
@@ -33,40 +34,36 @@ export default defineComponent({
         const confirmView = ref(false);
         let passwordMount = ref(null);
         let confirmMount = ref(null);
-
         const triggerPass = ref(() => {
             passwordView.value = !passwordView.value;
-
             if (passwordView.value) {
                 passwordMount.value.type = "text";
-            } else {
+            }
+            else {
                 passwordMount.value.type = "password";
             }
-        })
-
+        });
         const triggerConf = ref(() => {
             confirmView.value = !confirmView.value;
-
             if (confirmView.value) {
                 confirmMount.value.type = "text";
-            } else {
+            }
+            else {
                 confirmMount.value.type = "password";
             }
-
-        })
-
+        });
         onMounted(() => {
             passwordMount = ref(document.querySelector("#password"));
             confirmMount = ref(document.querySelector("#confirmp"));
-        })
-
+        });
         return {
             passwordView,
             confirmView,
             triggerPass,
             triggerConf
-        }
+        };
     },
+    components: { RouterLink }
 });
 </script>
 
@@ -114,7 +111,7 @@ export default defineComponent({
             }
         }
 
-        #email, #password, #fullname, #DOB, #confirmp, #address {
+        .userInfo {
             padding: 5px;
             background-color: #eee;
             border: none;
@@ -131,7 +128,7 @@ export default defineComponent({
             height: 13.5%;
         }
 
-        #name:focus, #password:focus, #fullname:focus, #DOB:focus, #confirmp:focus, #address:focus {
+        .userInfo:focus {
             border-bottom: solid #555 0.4px;
             transition: all 0.5s ease-in-out;
             background: #ddd;
