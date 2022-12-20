@@ -1,76 +1,36 @@
 <template>
-    <div class="listing" v-if="!makePopupAppear">
-        <div v-if="!booked && !manager">
-            <h3 class="heading">{{ roomInfo.name }}</h3>
-            <p class="description">{{ roomInfo.descriptiom }}</p>
-            <h3 class="price">{{ roomInfo.price }}</h3>
-            <p class="type">{{ roomInfo.type }}</p>
-            <p class="address">{{ roomInfo.address }}</p>
-            <button @click="triggerPopUp()">Book Now</button>
-        </div>
-        <div v-else-if="!manager">
-            <div v-if="!leaveReview">
-                <h3 class="heading">{{ roomInfo.name }}</h3>
-                <p class="description">{{ roomInfo.descriptiom }}</p>
-                <h3 class="price">{{ roomInfo.price }}</h3>
-                <p class="type">{{ roomInfo.type }}</p>
-                <p class="address">{{ roomInfo.address }}</p>
-                <button @click="triggerPopUp()">Cancel</button>
-                <button @click="triggerReview()">Add a review</button>
-            </div>
-            <div v-else>
+    <div class="listing">
+        <div class="main-image" :id="roomInfo.id"></div>
+        <div class="details-holder">
+            <div class="name-rating">
+                <div class="hotel-name">{{ roomInfo.name }}</div>
                 <div class="rating">
-                    <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                    <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                    {{ roomDetails.rating }} ★ <p>x reviews</p>
                 </div>
-                <label for="details">Details</label>
-                <input type="text" name="details" id="details" placeholder="(optional)"/>
-
-                <button @click="triggerReview()">Submit</button>
-                <button @click="triggerReview()">Cancel</button>
             </div>
-        </div>
-        <div v-else>
-            <div v-if="!confirmRemove">
-                <p class="description">{{ roomInfo.descriptiom }}</p>
-                <h3 class="price">{{ roomInfo.price }}</h3>
-                <p class="type">{{ roomInfo.type }}</p>
-                <p class="address">{{ roomInfo.address }}</p>
-                <button @click="triggerConfirm">Remove Listing</button>
+            <div class="type-address">
+                <div class="type">{{ roomInfo.type }}</div>
+                <div class="address">{{ roomInfo.address }}</div>
             </div>
-            <div v-else>
-                <p class="id">{{ roomInfo.id }}</p>
-                <button @click="triggerConfirm">I am Sure</button>
+            <div class="price-booking">
+                <div class="price">{{ roomInfo.price }}</div>
+                <button class="book">Book Now</button>
             </div>
-        </div>
-    </div>
-    <div class="confirmation" v-else>
-        <p class="id">{{ roomInfo.id }}</p>
-
-        <div v-if="!booked">
-            <label for="date">Date</label>
-            <input type="date" name="date" id="date" />
-
-            <button @click="triggerPopUp()">Book</button>
-            <button @click="triggerPopUp()">Cancel</button>
-        </div>
-        <div v-else>
-            <button @click="triggerPopUp()">Confirm Cancellation</button>
         </div>
     </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
     props: ["roomInfo", "booked", "manager"],
-    setup() {
+    setup(props) {
         const makePopupAppear = ref(false);
         const leaveReview = ref(false);
         const confirmRemove = ref(false);
+        console.log(props.roomInfo);
+        const roomDetails = ref(props.roomInfo);
+        console.log(roomDetails.value);
 
         const triggerPopUp = ref(() => {
             makePopupAppear.value = !makePopupAppear.value;
@@ -84,51 +44,111 @@ export default defineComponent({
             confirmRemove.value = !confirmRemove.value;
         })
 
+
+        onMounted(() => {
+            const img_holder = ref(document.querySelectorAll(".main-image"));
+
+            img_holder.value.forEach(entry => {
+                if (entry.id.includes(props.roomInfo.id.toString())) {
+                    entry.style.backgroundImage = `url("${ props.roomInfo.images[0] }")`
+                }
+            })
+        });
+
         return {
             makePopupAppear,
             triggerPopUp,
             leaveReview,
             triggerReview,
             confirmRemove,
-            triggerConfirm
+            triggerConfirm,
+            roomDetails
         }
+
     },
-    name: "SingleListing",
+    name: "SingleListing"
 });
 </script>
 
 <style lang="scss" scoped>
-.rating {
-display: flex;
-flex-direction: row-reverse;
-justify-content: center;
+.listing {
+    height: 15vh;
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin: 10px;
+    border: solid #777 2px;
+    border-radius: 4px;
+    .main-image {
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 100%;
+        width: 20%;
+
+    }
+
+    .details-holder {
+        height: 100%;
+        width: 80%;
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .name-rating {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .hotel-name {
+                font-size: 4vh;
+            }
+
+            .rating {
+                background: #82500A;
+                color: #fff;
+                width: max-content;
+                padding: 4px;
+                height: ma;
+                border-radius: 5px;
+
+                p {
+                    font-size: small;
+                }
+                
+            }
+        }
+
+        .type-address {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .type {
+                font-size: large;
+            }
+
+            .address {
+                font-size: large;
+            }
+        }
+
+        .price-booking {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .price {
+                font-size: x-large;
+            }
+
+            .book {
+                background: #82500A;
+                color: #fff;
+                padding: 7px;
+                border: none;
+                font-size: x-large;
+            }
+        }
+    }
 }
-
-
-.rating > input{ display:none;}
-
-.rating > label {
-position: relative;
-width: 1.1em;
-font-size: 1.5vw;
-color: #FFD700;
-cursor: pointer;
-}
-
-.rating > label::before{
-content: "\2605";
-position: absolute;
-opacity: 0;
-}
-
-.rating > label:hover:before,
-.rating > label:hover ~ label:before {
-opacity: 1 !important;
-}
-
-.rating > input:checked ~ label:before{
-opacity:1;
-}
-
-.rating:hover > input:checked ~ label:before{ opacity: 0.4; }
 </style>

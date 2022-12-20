@@ -23,6 +23,8 @@ export default defineComponent({
                 price: "6 pesos",
                 type: "Single Mouse",
                 address: "New Zealand",
+                rating: 2,
+                images: ["https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg", "https://www.ohotelsindia.com/pune/images/b32d5dc553ee2097368bae13f83e93cf.jpg"]
             },
             {
                 id: 1979,
@@ -31,10 +33,10 @@ export default defineComponent({
                 price: "-6 rubies",
                 type: "MultiCuisine",
                 address: "France 🤮🤮🤮",
+                rating: 1,
+                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
             }
         ]);
-
-        console.log(listings.value);
 
         return {
             listings

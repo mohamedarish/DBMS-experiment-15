@@ -4,7 +4,6 @@
             <router-link to="/">Home</router-link> |
             <router-link to="/login">Login</router-link> |
             <router-link to="/register">Register</router-link> |
-            <router-link to="/addroom">AddRoom</router-link> |
             <router-link to="/loginhotel">LoginHotel</router-link> |
             <router-link to="/registerhotel">RegisterHotel</router-link> |
             <router-link to="/allrooms">AllRooms</router-link> |

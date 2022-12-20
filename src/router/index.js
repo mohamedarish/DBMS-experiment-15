@@ -2,13 +2,13 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NewHotelView from "../views/NewHotelView.vue";
-import NewRoomView from "../views/NewRoomView.vue";
 import OldHotelView from "../views/OldHotelView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import ListingsView from "../views/ListingsView.vue";
 import BookedView from "../views/BookedView.vue";
 import ListedRooms from "../views/ListedRooms.vue";
 import SingleRoomView from "../views/SingleRoomView.vue";
+import ErrorView from "../views/ErrorView.vue";
 
 const routes = [
     {
@@ -25,11 +25,6 @@ const routes = [
         path: "/register",
         name: "register",
         component: RegisterView,
-    },
-    {
-        path: "/addroom",
-        name: "addroom",
-        component: NewRoomView,
     },
     {
         path: "/loginhotel",
@@ -60,6 +55,15 @@ const routes = [
         path: "/room",
         name: "room",
         component: SingleRoomView,
+    },
+    {
+        path: "/404",
+        name: "error",
+        component: ErrorView,
+    },
+    {
+        path: "/:pathmatch(.*)",
+        redirect: "/404",
     },
 ];
 

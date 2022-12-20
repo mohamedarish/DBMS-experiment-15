@@ -12,6 +12,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import SingleListingVue from './SingleListing.vue';
+
 export default defineComponent({
     setup() {
         const listedRooms = ref([
@@ -22,6 +23,8 @@ export default defineComponent({
                 price: "6 pesos",
                 type: "Single Mouse",
                 address: "New Zealand",
+                rating: 5,
+                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
             },
             {
                 id: 14,
@@ -30,6 +33,8 @@ export default defineComponent({
                 price: "6 rupees",
                 type: "Triple Mouse",
                 address: "Australia",
+                rating: 1,
+                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
             }
         ]);
 
@@ -45,6 +50,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 
 </style>
