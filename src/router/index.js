@@ -52,8 +52,9 @@ const routes = [
         component: ListedRooms,
     },
     {
-        path: "/room",
+        path: "/room:id",
         name: "room",
+        params: true,
         component: SingleRoomView,
     },
     {

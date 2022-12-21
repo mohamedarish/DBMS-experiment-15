@@ -1,11 +1,11 @@
 <template>
     <div v-if="listedRooms.length < 1">
-        <div>No listings made yet</div>
+        <div class="noListing">No listings added yet yet</div>
         <AddRoomVue />
     </div>
     <div v-else>
         <div v-for="listing in listedRooms" :key="listing">
-            <SingleListingVue :roomInfo="listing" :booked="false" :manager="true" />
+            <HotelListingVue :roomInfo="listing"/>
         </div>
         <AddRoomVue />
     </div>
@@ -13,7 +13,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import SingleListingVue from './SingleListing.vue';
+import HotelListingVue from './HotelListing.vue';
 import AddRoomVue from './AddRoom.vue';
 
 export default defineComponent({
@@ -49,12 +49,16 @@ export default defineComponent({
     },
     name: "MyListings",
     components: {
-        SingleListingVue,
+        HotelListingVue,
         AddRoomVue
     }
 })
 </script>
 
 <style lang="scss" scoped>
-
+.noListing {
+    width: 60%;
+    margin: 10px;
+    padding: 10px;
+}
 </style>

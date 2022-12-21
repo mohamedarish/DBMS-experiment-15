@@ -14,7 +14,7 @@
             </div>
             <div class="price-booking">
                 <div class="price">{{ roomInfo.price }}</div>
-                <button class="book">Book Now</button>
+                <button class="rate">Rate Now</button>
             </div>
         </div>
     </div>
@@ -150,7 +150,7 @@ export default defineComponent({
                 font-size: x-large;
             }
 
-            .book {
+            .rate {
                 background-color: #82500A;
                 color: #fff;
                 padding: 7px;

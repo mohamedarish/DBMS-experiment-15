@@ -1,15 +1,18 @@
 <template>
     <div class="roomDetails">
         <div class="image-holders">
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-722179355353877964/original/0c5adc5c-5351-4726-9275-0325a2183e1a.jpeg" class="main-image" />
-            <div class="sub-holder">
-                <div class="sub-image">
-                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-722179355353877964/original/0c5adc5c-5351-4726-9275-0325a2183e1a.jpeg" class="imgur" />
-                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-722179355353877964/original/0c5adc5c-5351-4726-9275-0325a2183e1a.jpeg" class="imgur" />
-                </div>
-                <div class="sub-image">
-                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-722179355353877964/original/0c5adc5c-5351-4726-9275-0325a2183e1a.jpeg" class="imgur" />
-                    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-722179355353877964/original/0c5adc5c-5351-4726-9275-0325a2183e1a.jpeg" class="imgur" />
+            <div class="img1" v-if="roomInfo.images.length == 1">
+                <img class="first-img" />
+            </div>
+            <div class="img2" v-else-if="roomInfo.images.length == 2">
+                <img class="first-img" />
+                <img class="second-img" @click="replaceMain(2)"/>
+            </div>
+            <div class="img3" v-else-if="roomInfo.images.length == 3">
+                <img :src="roomInfo.images[0]" class="first-img" />
+                <div class="sub">
+                    <div class="second-img" @click="replaceMain(2)"/>
+                    <img class="third-img" @click="replaceMain(3)"/>
                 </div>
             </div>
         </div>
@@ -24,10 +27,49 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
-    props: ["RoomInfo", "available"],
-    setup(props) {},
+    props: ["roomInfo", "available"],
+    setup(props) {
+        let firstImg = ref(null);
+        let secondImg = ref(null);
+        let thirdImg = ref(null);
+
+
+        const replaceMain = ref((num) => {
+            if (num == 2) {
+                const tempSrc = secondImg.value.style.backgroundImage;
+                secondImg.value.style.backgroundImage = firstImg.value.style.backgroundImage;
+                firstImg.value.style.backgroundImage = tempSrc;
+            } else if (num == 3) {
+                const tempSrc = thirdImg.value.style.backgroundImage;
+                thirdImg.value.style.backgroundImage = firstImg.value.style.backgroundImage;
+                firstImg.value.style.backgroundImage = tempSrc;
+            }
+        })
+
+        onMounted(() => {
+            firstImg = ref(document.querySelector(".first-img"));
+            secondImg = ref(document.querySelector(".second-img"));
+            thirdImg = ref(document.querySelector(".third-img"));
+
+            if (firstImg.value) {
+                firstImg.value.style.backgroundImage = `url("${props.roomInfo.images[0]}")`;
+            }
+
+            if (secondImg.value) {
+                secondImg.value.style.backgroundImage = `url("${props.roomInfo.images[1]}")`;
+            }
+
+            if (thirdImg.value) {
+                thirdImg.value.style.backgroundImage = `url("${props.roomInfo.images[2]}")`;
+            }
+        })
+
+        return {
+            replaceMain
+        }
+    },
     name: "RoomDetailed"
 })
 </script>
@@ -47,36 +89,81 @@ export default defineComponent({
         justify-content: center;
         margin-bottom: 12px;
 
-        .main-image {
-            width: 35%;
+        .img1 {
+            width: 65%;
             height: 100%;
-            background: green;
-            margin-right: 12px;
-            border-radius: 12px;
+            border: solid #999 2px;
+            padding: 10px;
+            margin: 10px 10px 10px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .first-img {
+                width: 98%;
+                height: 98%;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
         }
 
-        .sub-holder {
-            width: 25%;
+        .img2 {
+            width: 65%;
             height: 100%;
-            border-radius: 12px;
+            border: solid #999 2px;
+            padding: 10px;
+            margin: 10px 10px 10px 10px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-            .sub-image:first-of-type {
-                margin-bottom: 12px;
+            .first-img {
+                width: 59%;
+                height: 100%;
+                margin-right: 3px;
+                background-repeat: no-repeat;
+                background-size: cover;
             }
 
-            .sub-image {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                height: 50%;
+            .second-img {
+                width: 39%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        }
 
-                .imgur {
-                    width: 50%;
-                    height: 100%;
-                    margin-right: 12px;
-                    border-radius: 12px;
+        .img3 {
+            width: 65%;
+            height: 100%;
+            border: solid #999 2px;
+            padding: 10px;
+            margin: 10px 10px 10px 10px;
+            display: flex;
+
+            .first-img {
+                width: 60%;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-size: cover;
+                margin-right: 2px;
+            }
+
+            .sub {
+                width: 40%;
+                .second-img {
+                    width: 100%;
+                    height: 50%;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    margin-bottom: 2px;
+                }
+
+                .third-img {
+                    width: 100%;
+                    height: 50%;
+                    background-repeat: no-repeat;
+                    background-size: cover;
                 }
             }
         }
