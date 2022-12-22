@@ -12,23 +12,34 @@
             <p>{{ review.head }}</p>
         </div>
         <div class="row3">
-            <p>{{ review.content }}</p>
+            <p v-if="!fullRevFlag && review.content.length > 500">{{ review.content.substring(0, 500) }} <b @click="triggerFullReview">Read More...</b></p>
+            <p v-else @click="triggerFullReview()">{{ review.content }}</p>
         </div>
     </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 export default defineComponent({
     props: ["review"],
-    setup () {},
+    setup () {
+        const fullRevFlag = ref(false);
+
+        const triggerFullReview = ref(() => {
+            fullRevFlag.value = !fullRevFlag.value;
+        });
+
+        return {
+            fullRevFlag,
+            triggerFullReview
+        }
+    },
     name: "ReviewHolder"
 })
 </script>
 
 <style lang="scss" scoped>
 .review {
-    height: 100px;
     display: flex;
     flex-direction: column;
     padding: 10px;
