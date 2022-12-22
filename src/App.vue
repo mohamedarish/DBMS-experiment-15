@@ -9,7 +9,6 @@
             <router-link to="/allrooms" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">AllRooms</router-link>
             <router-link to="/bookings" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">Booked</router-link>
             <router-link to="/mylistings" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">MyListings</router-link>
-            <router-link to="/room:12" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">SingleRoom</router-link>
         </div>
 
         <div class="state-login">
@@ -42,15 +41,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-}
-
+<style lang="scss" scoped>
 nav {
     display: flex;
     width: 100vw;

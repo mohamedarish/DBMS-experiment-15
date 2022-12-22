@@ -1,12 +1,12 @@
 <template>
     <div class="login">
-        <form>
+        <form v-on:submit.prevent>
             <p>Email</p>
             <input type="email" name="name" id="name" placeholder="john@doe.com" class="userInfo" required />
             <p>password:</p>
             <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" class="userInfo" required/>
             <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
-            <input type="submit" id="login" value="Login"/>
+            <input type="submit" id="login" value="Login" @click="triggerLogin()"/>
 
             <p>New to this site? <RouterLink to="./register">SignUp</RouterLink></p>
             <p>Hotel Manager? <RouterLink to="./loginhotel">Hotel Login</RouterLink></p>
@@ -16,7 +16,7 @@
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 export default defineComponent({
     components: {
     RouterLink,
@@ -40,9 +40,16 @@ export default defineComponent({
             passwordField = ref(document.querySelector("#password"));
         })
 
+        const router = useRouter();
+
+        const triggerLogin = ref(() => {
+            router.push("allrooms");
+        })
+
         return {
             checkboxState,
-            triggerPassword
+            triggerPassword,
+            triggerLogin
         };
     }
 });

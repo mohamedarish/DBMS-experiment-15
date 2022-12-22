@@ -60,6 +60,7 @@ model Room {
 model Review {
     reviewID    Int      @id @default(autoincrement())
     review      Int
+    title       String
     description String
     userNo      Int
     roomNo      Int

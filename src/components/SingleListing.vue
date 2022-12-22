@@ -14,7 +14,7 @@
             </div>
             <div class="price-booking">
                 <div class="price">{{ roomInfo.price }}</div>
-                <button class="book">Book Now</button>
+                <button class="book" @click="viewDeatiled">Book Now</button>
             </div>
         </div>
     </div>
@@ -22,6 +22,7 @@
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 export default defineComponent({
     props: ["roomInfo"],
     setup(props) {
@@ -65,6 +66,12 @@ export default defineComponent({
             })
         });
 
+        const router = useRouter();
+
+        const viewDeatiled = ref(() => {
+            router.push(`room:${ props.roomInfo.id }`);
+        })
+
         return {
             makePopupAppear,
             triggerPopUp,
@@ -72,6 +79,7 @@ export default defineComponent({
             triggerReview,
             confirmRemove,
             triggerConfirm,
+            viewDeatiled
         }
 
     },

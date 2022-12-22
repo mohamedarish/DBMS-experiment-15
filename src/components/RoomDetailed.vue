@@ -2,33 +2,82 @@
     <div class="roomDetails">
         <div class="image-holders">
             <div class="img1" v-if="roomInfo.images.length == 1">
-                <img class="first-img" />
+                <div class="first-img" />
             </div>
             <div class="img2" v-else-if="roomInfo.images.length == 2">
-                <img class="first-img" />
-                <img class="second-img" @click="replaceMain(2)"/>
+                <div class="first-img" />
+                <div class="second-img" @click="replaceMain(2)"/>
             </div>
             <div class="img3" v-else-if="roomInfo.images.length == 3">
-                <img :src="roomInfo.images[0]" class="first-img" />
+                <div class="first-img" />
                 <div class="sub">
                     <div class="second-img" @click="replaceMain(2)"/>
-                    <img class="third-img" @click="replaceMain(3)"/>
+                    <div class="third-img" @click="replaceMain(3)"/>
                 </div>
             </div>
         </div>
         <div class="address-book">
-            <div class="details"></div>
-            <div class="booker"></div>
+            <div class="details">
+                <div class="row1">
+                    <div class="name">
+                        {{ roomInfo.name }}
+                    </div>
+                    <div class="rating">
+                        {{ roomInfo.rating }} ⭐️
+                    </div>
+                </div>
+                <div class="row2">
+                    <p>{{ roomInfo.address }}</p>
+                </div>
+            </div>
+            <div class="booker">
+                <div class="top">
+                    <div class="listPrice">
+                        <div class="label">
+                            Original Price:
+                        </div>
+                        <div class="OPrice">
+                            {{ parseInt(roomInfo.price.split()[0]) }}
+                        </div>
+                    </div>
+                    <div class="tax">
+                        <div class="label">
+                            Tax (30%)
+                        </div>
+                        <div class="taxAmt">
+                            {{ (parseInt(roomInfo.price.split()[0]) * 0.3).toFixed(2) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="total">
+                        <div class="label">
+                            Total
+                        </div>
+                        <div class="totalP">
+                            {{ (parseInt(roomInfo.price.split()[0]) * 1.3).toFixed(2) }}
+                        </div>
+                    </div>
+                    <div class="booker">
+                        <button class="pay" @click="triggerBook()">Pay & Book</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="reviews">
-            <div class="review-holder"></div>
+            <div class="review-holder" v-for="review in reviews" :key="review">
+                <ReviewHolderVue class="review" :review="review"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import ReviewHolderVue from './ReviewHolder.vue';
 export default defineComponent({
+    components: { ReviewHolderVue },
     props: ["roomInfo", "available"],
     setup(props) {
         let firstImg = ref(null);
@@ -66,8 +115,54 @@ export default defineComponent({
             }
         })
 
+        const reviews = ref([
+            {
+                id: 1,
+                rate: 2,
+                head: "bad",
+                content: "very bad",
+                user: "anon"
+            },
+            {
+                id: 2,
+                rate: 4,
+                head: "ok",
+                content: "It's okay",
+                user: "not anon"
+            },
+            {
+                id: 3,
+                rate: 5,
+                head: "nice",
+                content: "It's a nice hotel",
+                user: "Very anon"
+            },
+            {
+                id: 4,
+                rate: 1,
+                head: "very bad",
+                content: "Vey bad hotel",
+                user: "cool person"
+            },
+            {
+                id: 5,
+                rate: 3,
+                head: "sub-par",
+                content: "It's just below okay but not very bad",
+                user: "guy"
+            }
+        ])
+
+        const router = useRouter();
+
+        const triggerBook = ref(() => {
+            router.push("bookings")
+        })
+
         return {
-            replaceMain
+            replaceMain,
+            triggerBook,
+            reviews
         }
     },
     name: "RoomDetailed"
@@ -76,18 +171,18 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .roomDetails {
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 
     .image-holders {
-        height: 50%;
+        height: 50vh;
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: center;
-        margin-bottom: 12px;
+        margin-bottom: 20px;
 
         .img1 {
             width: 65%;
@@ -181,29 +276,105 @@ export default defineComponent({
             height: 100%;
             width: 40%;
             margin-right: 12px;
-            background: gray;
+            background-color: antiquewhite;
             border-radius: 24px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+
+            .row1 {
+                height: 50%;
+                width: 100%;
+                padding: 10px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                .name {
+                    font-size: xx-large;
+                }
+
+                .rating {
+                    font-size: x-large;
+                }
+            }
+
+            .row2 {
+                padding: 10px;
+                display: flex;
+                width: 100%;
+                justify-content: flex-start;
+                font-size: x-large;
+            }
         }
 
         .booker {
             background: pink;
             height: 100%;
             width: 20%;
-            border-radius: 24px;
+            padding: 30px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            font-size: larger;
+            justify-content: space-between;
+
+            .top {
+                .listPrice {
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: space-between;
+                }
+
+                .tax {
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: space-between;
+                }
+            }
+            
+            .bottom {
+                height: 50%;
+                width: 100%;
+                .total {
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+                    justify-content: space-between;
+                }
+
+                .booker {
+                    width: 100%;
+                    height: 100%;
+
+                    .pay {
+                        width: 100%;
+                        height: 5vh;
+                        border: none;
+                        border-radius: 15px;
+                        background: #82500A;
+                        color: #fff;
+                        font-size: 2vh;
+                    }
+                }
+            }
         }
     }
 
     .reviews {
-        height: 40%;
-        width: 100%;
+        background-color: #bee;
+        width: 60%;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
 
         .review-holder {
-            background: cyan;
-            height: 100%;
-            width: 60%;
-            border-radius: 24px;
+            width: 100%;
+
+            .review {
+                width: 98%;
+            }
         }
     }
 }

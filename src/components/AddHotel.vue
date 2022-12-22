@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <form>
+        <form v-on:submit.prevent>
             <p>Email</p>
             <input type="email" name="email" id="email" placeholder="john@hotel.com" class="userInfo" required/>
             <p>Hotel Name</p>
@@ -15,7 +15,7 @@ city" required/>
             <p>Confirm Password</p>
             <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required/>
             <input type="checkbox" name="showConf" id="showConf" :checked="confirmView" @input="triggerConf()" />
-            <input type="submit" id="register" value="Register" />
+            <input type="submit" id="register" value="Register" @click="triggerRegister()"/>
             <p>Have an account? <RouterLink to="./loginhotel">Sign In</RouterLink></p>
             <p>New Customer? <RouterLink to="./register">Sign Up</RouterLink></p>
         </form>
@@ -24,7 +24,7 @@ city" required/>
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 export default defineComponent({
     components: { RouterLink },
     name: "AddHotel",
@@ -60,11 +60,18 @@ export default defineComponent({
             confirmMount = ref(document.querySelector("#confirmp"));
         })
 
+        const router = useRouter();
+
+        const triggerRegister = ref(() => {
+            router.push("mylistings");
+        })
+
         return {
             passwordView,
             confirmView,
             triggerPass,
-            triggerConf
+            triggerConf,
+            triggerRegister
         }
     },
 });

@@ -14,7 +14,7 @@
             </div>
             <div class="price-booking">
                 <div class="price">{{ roomInfo.price }}</div>
-                <button class="cancel">Cancel Listing</button>
+                <button class="cancel">Cancel Booking</button>
             </div>
         </div>
     </div>
