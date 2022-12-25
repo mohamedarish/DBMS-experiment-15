@@ -2,18 +2,20 @@
     <nav>
         <div class="links">
             <router-link to="/">Home</router-link>
+            <router-link to="/allrooms" v-if="creds.name">All rooms</router-link>
         </div>
         <div class="state-login" @click="triggerPop()">
             <p class="username" v-if="creds.name">{{ creds.name }}</p>
             <img src="./assets/hotel.png" class="user" v-if='creds.name && creds.type == "hotel"'/>
-            <img src="./assets/user.png" class="user" v-if='creds.name && creds.type=="user"'/>
+            <img src="./assets/user.png" class="user" v-else-if='creds.name && creds.type=="user"'/>
             <router-link to="/login" v-else>login</router-link>
         </div>
     </nav>
     <div class="popup-module" v-if="popupFlag && creds.name" @click="triggerPop()">
         <div class="popup">
             <ul>
-                <router-link to="/bookings"><li>My Bookings</li></router-link>
+                <li v-if="creds.type == 'hotel'"><router-link to="/mylistings">My Listings</router-link></li>
+                <li v-else-if="creds.type == 'user'"><router-link to="/bookings">My Bookings</router-link></li>
                 <li @click="logOut()">Log out</li>
             </ul>
         </div>
@@ -26,7 +28,7 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 export default {
@@ -37,8 +39,11 @@ export default {
 
         const creds = computed(() => store.state.user);
 
+        const router = ref(useRouter());
+
         const logOut = ref(() => {
             store.commit("updateLogin", {name: "", email: "", type: ""});
+            router.value.push({path: "/"});
         })
 
         const subdir = computed(() => route.value.path);

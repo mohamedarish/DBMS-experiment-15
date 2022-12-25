@@ -10,7 +10,7 @@
         </Transition>
         <input type="submit" id="login" value="Login" @click="triggerLogin()"/>
 
-        <p>New to this site? <RouterLink to="./register">SignUp</RouterLink></p>
+        <p>New to this site? <RouterLink to="./registerhotel">SignUp</RouterLink></p>
         <p>Customer? <RouterLink to="./login">User Login</RouterLink></p>
     </form>
 </template>

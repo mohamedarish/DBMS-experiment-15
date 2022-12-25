@@ -40,7 +40,7 @@ export default defineComponent({
         let confirmMount = ref(null);
         const email = ref("");
         const name = ref("");
-        const DOB = ref("");
+        const DOB = ref(new Date().toString());
         const address = ref("");
         const pword = ref("");
         const cpword = ref("");
@@ -94,7 +94,7 @@ export default defineComponent({
                 const { data } = await axios.post("http://localhost:8000/api/user/register", {
                     email: email.value,
                     name: name.value,
-                    DOB: DOB.value,
+                    DOB: new Date(DOB.value),
                     address: address.value,
                     password: pword.value
                 }, config);
