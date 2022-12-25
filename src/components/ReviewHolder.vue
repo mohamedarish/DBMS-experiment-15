@@ -44,7 +44,8 @@ export default defineComponent({
     flex-direction: column;
     padding: 10px;
     margin: 10px;
-    background-color: pink;
+    border-top: solid #999 2px;
+    border-bottom: solid #999 2px;
 
     .row1 {
         // width: 100vh;

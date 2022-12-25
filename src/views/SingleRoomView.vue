@@ -9,7 +9,7 @@ import RoomDetailedVue from '@/components/RoomDetailed.vue';
 export default defineComponent({
     name: "SingleRoomView",
     props: ["roomId"],
-    setup(props) {
+    setup() {
         const rooms = [
             {
                 id: 12,

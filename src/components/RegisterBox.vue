@@ -2,22 +2,26 @@
     <div class="login">
         <form v-on:submit.prevent>
             <p>Email</p>
-            <input type="email" name="email" id="email" placeholder="john@doe.com" class="userInfo" required/>
+            <input type="email" name="email" id="email" placeholder="john@doe.com" class="userInfo" required v-model="email"/>
             <p>Full Name</p>
-            <input type="text" name="fullname" id="fullname" placeholder="John Doe" class="userInfo" required/>
+            <input type="text" name="fullname" id="fullname" placeholder="John Doe" class="userInfo" required v-model="name"/>
             <p>Date of Birth</p>
-            <input type="date" name="DOB" id="DOB" class="userInfo" required/>
+            <input type="date" name="DOB" id="DOB" class="userInfo" required v-model="DOB"/>
             <p>Address</p>
             <textarea name="address" id="address" cols="5" rows="20" class="userInfo" placeholder="House
 street
-city" required/>
+city" required v-model="address"/>
             <p>Password</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" class="userInfo" required/>
+            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" class="userInfo" required v-model="pword"/>
             <input type="checkbox" name="showPass" id="showPass" :checked="passwordView" @input="triggerPass()" />
             <p>Confirm Password</p>
-            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required/>
+            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required v-model="cpword"/>
             <input type="checkbox" name="showConf" id="showConf" :checked="confirmView" @input="triggerConf()" />
+            <Transition name="invalid">
+                <p id="invalidReq" v-if="invalidReq">Invalid Information Provided</p>
+            </Transition>
             <input type="submit" id="register" value="Register" @click="triggerRegister()"/>
+
             <p>Have an account? <RouterLink to="./login">Sign In</RouterLink></p>
             <p>Manage a Hotel? <RouterLink to="./registerhotel">Hotel Sign Up</RouterLink></p>
         </form>
@@ -25,6 +29,7 @@ city" required/>
 </template>
 
 <script>
+import axios from "axios";
 import { defineComponent, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 export default defineComponent({
@@ -34,6 +39,14 @@ export default defineComponent({
         const confirmView = ref(false);
         let passwordMount = ref(null);
         let confirmMount = ref(null);
+        const email = ref("");
+        const name = ref("");
+        const DOB = ref("");
+        const address = ref("");
+        const pword = ref("");
+        const cpword = ref("");
+        const invalidReq = ref(false);
+
         const triggerPass = ref(() => {
             passwordView.value = !passwordView.value;
             if (passwordView.value) {
@@ -59,15 +72,62 @@ export default defineComponent({
 
         const router = useRouter();
 
-        const triggerRegister = ref(() => {
-            router.push("allrooms");
+        const triggerRegister = ref(async () => {
+            if (pword.value !== cpword.value) {
+                invalidReq.value = true;
+                reutrn;
+            }
+
+            if (!email.value || !name.value || !DOB.value || !address.value || !pword.value) {
+                invalidReq.value = true;
+                return;
+            }
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+
+            try {
+                const { data } = await axios.post("http://localhost:8000/api/user/register", {
+                    email: email.value,
+                    name: name.value,
+                    DOB: DOB.value,
+                    address: address.value,
+                    password: pword.value
+                }, config);
+
+                if (!data) return;
+
+                if (data.email) {
+                    localStorage.setItem({
+                        email: data.email,
+                        name: data.name,
+                        type: "user"
+                    });
+                    router.push("allrooms");
+                } else {
+                    invalidReq.value = true;
+                }
+            } catch(_error) {
+                invalidReq.value = true;
+                return;
+            }
         })
         return {
             passwordView,
             confirmView,
             triggerPass,
             triggerConf,
-            triggerRegister
+            triggerRegister,
+            email,
+            name,
+            DOB,
+            address,
+            pword,
+            cpword,
+            invalidReq
         };
     },
     components: { RouterLink }
@@ -153,17 +213,38 @@ export default defineComponent({
             width: 4vh;
             height: 2vh;
             position: absolute;
-            right: 37.5%;
         }
 
         #showPass {
-            bottom: 38.7%;
+            transform: translate(220px, 80px);
         }
 
         #showConf {
-            bottom: 33%;
+            transform: translate(220px, 140px);
         }
 
+        #invalidReq {
+            color: red;
+            margin-bottom: 12px;
+        }
+
+        .invalid-enter-from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        .invalid-enter-active {
+            transition: all 0.3s ease-out;
+        }
+
+        .invalid-leave-to {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .invalid-leave-active {
+            transition: all 0.3s ease-in;
+        }
     }
 }
 

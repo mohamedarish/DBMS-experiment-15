@@ -58,7 +58,7 @@
                             {{ (parseInt(roomInfo.price.split()[0]) * 1.3).toFixed(2) }}
                         </div>
                     </div>
-                    <div class="booker">
+                    <div class="payer">
                         <button class="pay" @click="triggerBook()">Pay & Book</button>
                     </div>
                 </div>
@@ -280,7 +280,6 @@ Maecenas sit amet dignissim elit. Donec in leo sit amet arcu ullamcorper accumsa
             height: 100%;
             width: 40%;
             margin-right: 12px;
-            background-color: antiquewhite;
             border-radius: 24px;
             padding: 10px;
             display: flex;
@@ -313,7 +312,7 @@ Maecenas sit amet dignissim elit. Donec in leo sit amet arcu ullamcorper accumsa
         }
 
         .booker {
-            background: pink;
+            border: solid #999 2px;
             height: 100%;
             width: 20%;
             padding: 30px;
@@ -349,7 +348,7 @@ Maecenas sit amet dignissim elit. Donec in leo sit amet arcu ullamcorper accumsa
                     justify-content: space-between;
                 }
 
-                .booker {
+                .payer {
                     width: 100%;
                     height: 100%;
 
@@ -358,8 +357,8 @@ Maecenas sit amet dignissim elit. Donec in leo sit amet arcu ullamcorper accumsa
                         height: 5vh;
                         border: none;
                         border-radius: 15px;
-                        background: #82500A;
-                        color: #fff;
+                        border: solic #999 2px;
+                        color: #333;
                         font-size: 2vh;
                     }
                 }
@@ -368,7 +367,6 @@ Maecenas sit amet dignissim elit. Donec in leo sit amet arcu ullamcorper accumsa
     }
 
     .reviews {
-        background-color: #bee;
         width: 60%;
         display: flex;
         flex-direction: column;

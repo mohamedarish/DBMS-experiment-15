@@ -12,30 +12,72 @@
         </div>
 
         <div class="state-login">
-            <p  class="username">SignedInUser</p>
-            <img src="https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png" class="user" />
+            <p class="username" v-if="loggedIn">{{ name }}</p>
+            <img src="./assets/hotel.png" class="user" v-if='loggedIn && type == "hotel"'/>
+            <img src="./assets/user.png" class="user" v-if='loggedIn && type=="user"'/>
+            <router-link to="/login" v-else>login</router-link>
         </div>
     </nav>
+    <div class="popup-module">
+        
+    </div>
     <router-view v-slot="{ Component }" class="main">
-        <transition name="route" mode="in-out">
+        <transition name="route" mode="out-in">
             <component :is="Component"></component>
         </transition>
     </router-view>
 </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 export default {
     setup() {
         const route = ref(useRoute());
 
+        const data = JSON.parse(localStorage.getItem("UserDetails"));
+
+        let name = data ? ref(data.name) : ref("");
+        let email = data ? ref(data.email) : ref("");
+        let type = data ? ref(data.type) : ref("");
+
+        let loggedIn = data ? ref(true) : ref(false);
+
         const subdir = computed(() => route.value.path);
 
-        console.log(subdir.value);
+        const router = useRouter();
+
+        router.afterEach(() => {
+            console.log(name.value, email.value, type.value, loggedIn.value);
+
+            const data = JSON.parse(localStorage.getItem("UserDetails"));
+
+            console.log(data);
+
+            if (!data) {
+                name = ref("");
+                email = ref("");
+                type = ref("");
+                loggedIn = ref(false);
+                return;
+            }
+
+            name = ref(data.name);
+            email = ref(data.email);
+            type = (data.type);
+
+            loggedIn = ref(true);
+
+            console.log(name.value, email.value, type.value, loggedIn.value);
+        })
+
 
         return {
-            subdir
+            subdir,
+            name,
+            email,
+            type,
+            loggedIn
         }
     }
 }
@@ -69,6 +111,9 @@ nav {
 
         .user {
             height: 44px;
+            width: 44px;
+            border-radius: 50%;
+            border: solid #ebeff4 0.5px;
         }
     }
 }

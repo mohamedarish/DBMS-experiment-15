@@ -4,20 +4,17 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "migrate": "npx prisma migrate dev --name hotelman"
+    "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@prisma/client": "^4.7.1",
+    "axios": "^1.2.1",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "vue-router": "^4.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "prisma": "^4.7.1",
     "sass": "^1.57.0",
     "sass-loader": "^13.2.0"
   }

@@ -2,10 +2,13 @@
     <div class="login">
         <form v-on:submit.prevent>
             <p>Email</p>
-            <input type="email" name="name" id="name" placeholder="john@doe.com" class="userInfo" required />
+            <input type="email" name="name" id="name" placeholder="john@doe.com" class="userInfo" required v-model="email"/>
             <p>password:</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" class="userInfo" required/>
+            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" class="userInfo" required v-model="pword"/>
             <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
+            <Transition name="invalid">
+                <p id="invalidReq" v-if="invalidReq">Invalid email or Password</p>
+            </Transition>
             <input type="submit" id="login" value="Login" @click="triggerLogin()"/>
 
             <p>New to this site? <RouterLink to="./register">SignUp</RouterLink></p>
@@ -15,6 +18,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { defineComponent, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 export default defineComponent({
@@ -25,6 +29,9 @@ export default defineComponent({
     setup() {
         const checkboxState = ref(false);
         let passwordField = ref(null);
+        const email = ref("");
+        const pword = ref("");
+        const invalidReq = ref(false);
 
         const triggerPassword = ref(() => {
             checkboxState.value = !checkboxState.value;
@@ -42,14 +49,53 @@ export default defineComponent({
 
         const router = useRouter();
 
-        const triggerLogin = ref(() => {
-            router.push("allrooms");
+        const triggerLogin = ref(async () => {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+
+            if (!email.value || !pword.value) {
+                invalidReq.value = true;
+                return;
+            }
+
+            try {
+                const {data} = await axios.post("http://localhost:8000/api/user/login", {
+                    email: email.value,
+                    password: pword.value,
+                }, config);
+
+                if (!data) {
+                    invalidReq.value = true;
+                    return;
+                };
+
+                if (data.name) {
+                    localStorage.setItem("UserDetails", JSON.stringify({
+                        email: data.email,
+                        name: data.name,
+                        type: "user"
+                    }));
+
+                    router.push("allrooms");
+                } else {
+                    invalidReq.value = true;
+                }
+            } catch(_error) {
+                invalidReq.value = true;
+                return;
+            }
         })
 
         return {
             checkboxState,
             triggerPassword,
-            triggerLogin
+            triggerLogin,
+            email,
+            pword,
+            invalidReq
         };
     }
 });
@@ -129,8 +175,30 @@ export default defineComponent({
             width: 4vh;
             height: 2vh;
             position: absolute;
-            right: 37.5%;
-            bottom: 47%;
+            transform: translate(220px, -20px);
+        }
+
+        #invalidReq {
+            color: red;
+            margin-bottom: 12px;
+        }
+
+        .invalid-enter-from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        .invalid-enter-active {
+            transition: all 0.3s ease-out;
+        }
+
+        .invalid-leave-to {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .invalid-leave-active {
+            transition: all 0.3s ease-in;
         }
     }
 }
