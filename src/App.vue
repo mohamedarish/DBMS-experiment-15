@@ -1,25 +1,22 @@
 <template>
     <nav>
         <div class="links">
-            <router-link to="/" v-if="['/'].includes(subdir)">Home</router-link>
-            <router-link to="/login" v-if="['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">Login</router-link>
-            <router-link to="/register" v-if="['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">Register</router-link>
-            <router-link to="/loginhotel" v-if="['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">LoginHotel</router-link>
-            <router-link to="/registerhotel" v-if="['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">RegisterHotel</router-link>
-            <router-link to="/allrooms" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">AllRooms</router-link>
-            <router-link to="/bookings" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">Booked</router-link>
-            <router-link to="/mylistings" v-if="!['/', '/login', '/register', '/loginhotel', '/registerhotel'].includes(subdir)">MyListings</router-link>
+            <router-link to="/">Home</router-link>
         </div>
-
-        <div class="state-login">
-            <p class="username" v-if="loggedIn">{{ name }}</p>
-            <img src="./assets/hotel.png" class="user" v-if='loggedIn && type == "hotel"'/>
-            <img src="./assets/user.png" class="user" v-if='loggedIn && type=="user"'/>
+        <div class="state-login" @click="triggerPop()">
+            <p class="username" v-if="creds.name">{{ creds.name }}</p>
+            <img src="./assets/hotel.png" class="user" v-if='creds.name && creds.type == "hotel"'/>
+            <img src="./assets/user.png" class="user" v-if='creds.name && creds.type=="user"'/>
             <router-link to="/login" v-else>login</router-link>
         </div>
     </nav>
-    <div class="popup-module">
-        
+    <div class="popup-module" v-if="popupFlag && creds.name" @click="triggerPop()">
+        <div class="popup">
+            <ul>
+                <router-link to="/bookings"><li>My Bookings</li></router-link>
+                <li @click="logOut()">Log out</li>
+            </ul>
+        </div>
     </div>
     <router-view v-slot="{ Component }" class="main">
         <transition name="route" mode="out-in">
@@ -29,55 +26,36 @@
 </template>
 
 <script>
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
 export default {
     setup() {
         const route = ref(useRoute());
 
-        const data = JSON.parse(localStorage.getItem("UserDetails"));
+        const store = useStore();
 
-        let name = data ? ref(data.name) : ref("");
-        let email = data ? ref(data.email) : ref("");
-        let type = data ? ref(data.type) : ref("");
+        const creds = computed(() => store.state.user);
 
-        let loggedIn = data ? ref(true) : ref(false);
+        const logOut = ref(() => {
+            store.commit("updateLogin", {name: "", email: "", type: ""});
+        })
 
         const subdir = computed(() => route.value.path);
 
-        const router = useRouter();
+        const popupFlag = ref(false);
 
-        router.afterEach(() => {
-            console.log(name.value, email.value, type.value, loggedIn.value);
-
-            const data = JSON.parse(localStorage.getItem("UserDetails"));
-
-            console.log(data);
-
-            if (!data) {
-                name = ref("");
-                email = ref("");
-                type = ref("");
-                loggedIn = ref(false);
-                return;
-            }
-
-            name = ref(data.name);
-            email = ref(data.email);
-            type = (data.type);
-
-            loggedIn = ref(true);
-
-            console.log(name.value, email.value, type.value, loggedIn.value);
+        const triggerPop = ref(() => {
+            popupFlag.value = !popupFlag.value;
         })
 
 
         return {
             subdir,
-            name,
-            email,
-            type,
-            loggedIn
+            popupFlag,
+            triggerPop,
+            creds,
+            logOut
         }
     }
 }
@@ -126,6 +104,42 @@ nav a {
 
 nav a.router-link-exact-active {
     color: #42b983;
+}
+
+.popup-module {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: flex-end;
+
+    .popup {
+        background: #ebeff4;
+        width: 10%;
+        height: 47px;
+        ul {
+            list-style: none;
+
+            a {
+                text-decoration: none;
+                color: #292929;
+
+                &:visited {
+                    text-decoration: none;
+                }
+
+                &:active {
+                    text-decoration: none;
+                }
+            }
+
+            li {
+                border-top: solid #999 1px;
+                border-bottom: solid #999 1px;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 // Route transitions

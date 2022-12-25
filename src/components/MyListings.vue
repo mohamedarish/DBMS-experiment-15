@@ -3,7 +3,7 @@
         <div class="noListing">No listings added yet yet</div>
         <AddRoomVue />
     </div>
-    <div v-else>
+    <div class="listings" v-else>
         <div v-for="listing in listedRooms" :key="listing">
             <HotelListingVue :roomInfo="listing"/>
         </div>
@@ -60,5 +60,14 @@ export default defineComponent({
     width: 60%;
     margin: 10px;
     padding: 10px;
+}
+
+.listings {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    height: 100vh;
+    padding-top: 20px;
 }
 </style>

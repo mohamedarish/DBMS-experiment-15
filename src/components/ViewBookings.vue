@@ -94,6 +94,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     .header-text {
         font-size: xx-large;
         width: 60%;

@@ -61,8 +61,6 @@ export default defineComponent({
 
         const reqRoom = ref(rooms.filter(element => element.id.toString() == route.params.id.slice(1))[0]);
 
-        console.log(reqRoom);
-
         return {
             reqRoom
         }

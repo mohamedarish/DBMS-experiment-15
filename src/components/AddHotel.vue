@@ -1,34 +1,33 @@
 <template>
-    <div class="login">
-        <form v-on:submit.prevent>
-            <p>Email</p>
-            <input type="email" name="email" id="email" placeholder="john@hotel.com" class="userInfo" required v-model="email"/>
-            <p>Hotel Name</p>
-            <input type="text" name="hotelname" id="hotelname" placeholder="HotelName" class="userInfo" required v-model="name"/>
-            <p>Address</p>
-            <textarea name="address" id="address" cols="5" rows="20" class="userInfo" placeholder="Hotel
+    <form v-on:submit.prevent>
+        <p>Email</p>
+        <input type="email" name="email" id="email" placeholder="john@hotel.com" class="userInfo" required v-model="email"/>
+        <p>Hotel Name</p>
+        <input type="text" name="hotelname" id="hotelname" placeholder="HotelName" class="userInfo" required v-model="name"/>
+        <p>Address</p>
+        <textarea name="address" id="address" cols="5" rows="20" class="userInfo" placeholder="Hotel
 street
 city" required v-model="address"/>
-            <p>Password</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" class="userInfo" required v-model="pword"/>
-            <input type="checkbox" name="showPass" id="showPass"  :checked="passwordView" @input="triggerPass()" />
-            <p>Confirm Password</p>
-            <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required v-model="cpword"/>
-            <input type="checkbox" name="showConf" id="showConf" :checked="confirmView" @input="triggerConf()" />
-            <Transition name="invalid">
-                <p id="invalidReq" v-if="invalidReq">Invalid Information Provided</p>
-            </Transition>
-            <input type="submit" id="register" value="Register" @click="triggerRegister()"/>
-            <p>Have an account? <RouterLink to="./loginhotel">Sign In</RouterLink></p>
-            <p>New Customer? <RouterLink to="./register">Sign Up</RouterLink></p>
-        </form>
-    </div>
+        <p>Password</p>
+        <input type="password" name="password" id="password" placeholder="SuperSecurePassword" class="userInfo" required v-model="pword"/>
+        <input type="checkbox" name="showPass" id="showPass"  :checked="passwordView" @input="triggerPass()" />
+        <p>Confirm Password</p>
+        <input type="password" name="confirmp" id="confirmp" placeholder="SuperSecurePassword" class="userInfo" required v-model="cpword"/>
+        <input type="checkbox" name="showConf" id="showConf" :checked="confirmView" @input="triggerConf()" />
+        <Transition name="invalid">
+            <p id="invalidReq" v-if="invalidReq">Invalid Information Provided</p>
+        </Transition>
+        <input type="submit" id="register" value="Register" @click="triggerRegister()"/>
+        <p>Have an account? <RouterLink to="./loginhotel">Sign In</RouterLink></p>
+        <p>New Customer? <RouterLink to="./register">Sign Up</RouterLink></p>
+    </form>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
+import { useStore } from "vuex";
 export default defineComponent({
     components: { RouterLink },
     name: "AddHotel",
@@ -72,15 +71,15 @@ export default defineComponent({
 
         const router = useRouter();
 
+        const store = useStore();
+
         const triggerRegister = ref(async () => {
             if (pword.value !== cpword.value) {
-                console.log("No pass");
                 invalidReq.value = true;
                 reutrn;
             }
 
             if (!email.value || !name.value || !address.value || !pword.value) {
-                console.log("Null value");
                 invalidReq.value = true;
                 return;
             }
@@ -102,18 +101,12 @@ export default defineComponent({
                 if (!data) return;
 
                 if (data.name) {
-                    localStorage.setItem({
-                        email: data.email,
-                        name: data.name,
-                        type: "hotel"
-                    });
+                    store.commit("updateLogin", {name: data.name, email: data.email, type: "hotel"})
                     router.push("mylistings");
                 } else {
-                    console.log("Many values");
                     invalidReq.value = true;
                 }
             } catch(_error) {
-                console.log(_error);
                 invalidReq.value = true;
                 return;
             }
@@ -137,116 +130,105 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.login {
-    height: calc(100vh - 64px);
-    background-image: url("https://www.gannett-cdn.com/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-
+form {
+    background: #eee;
+    height: 70%;
+    width: 35%;
     display: flex;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
 
-    form {
-        background: #eee;
-        height: 70%;
-        width: 35%;
+    p:nth-last-of-type(2) {
+        margin-top: 12px;
+    }
+
+    p {
+        width: 70%;
+        height: 3%;
         display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
+        align-items: flex-end;
+        justify-content: flex-start;
 
-        p:nth-last-of-type(2) {
-            margin-top: 12px;
+        a {
+            padding-left: 3px;
+            text-decoration-line: none;
+            color: #82500A;
+            text-decoration-color: #82500A;
         }
 
-        p {
-            width: 70%;
-            height: 3%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-start;
-
-            a {
-                padding-left: 3px;
-                text-decoration-line: none;
-                color: #82500A;
-                text-decoration-color: #82500A;
-            }
-
-            a:visited {
-                color: #82501B;
-                text-decoration-color: #82501B;
-            }
+        a:visited {
+            color: #82501B;
+            text-decoration-color: #82501B;
         }
+    }
 
-        .userInfo {
-            padding: 5px;
-            background-color: #eee;
-            border: none;
-            border-bottom: solid #777 0.2px;
-            width: 70%;
-            height: 4.5%;
-            font-size: 2vh;
-            box-decoration-break: none;
-            outline: none;
-            margin-bottom: 9px;
-        }
+    .userInfo {
+        padding: 5px;
+        background-color: #eee;
+        border: none;
+        border-bottom: solid #777 0.2px;
+        width: 70%;
+        height: 4.5%;
+        font-size: 2vh;
+        box-decoration-break: none;
+        outline: none;
+        margin-bottom: 9px;
+    }
 
-        #address {
-            height: 13.5%;
-        }
+    #address {
+        height: 13.5%;
+    }
 
-        .userInfo:focus {
-            border-bottom: solid #555 0.4px;
-            transition: all 0.5s ease-in-out;
-            background: #ddd;
-        }
+    .userInfo:focus {
+        border-bottom: solid #555 0.4px;
+        transition: all 0.5s ease-in-out;
+        background: #ddd;
+    }
 
-        #register {
-            width: 70%;
-            height: 7%;
-            background-color: #82500A;
-            color: #ccc;
-            font-size: 3vh;
-        }
+    #register {
+        width: 70%;
+        height: 7%;
+        background-color: #82500A;
+        color: #ccc;
+        font-size: 3vh;
+    }
 
-        #showPass, #showConf {
-            width: 4vh;
-            height: 2vh;
-            position: absolute;
-        }
+    #showPass, #showConf {
+        width: 4vh;
+        height: 2vh;
+        position: absolute;
+    }
 
-        #showPass {
-            transform: translate(220px, 50px);
-        }
+    #showPass {
+        transform: translate(220px, 50px);
+    }
 
-        #showConf {
-            transform: translate(220px, 110px);
-        }
+    #showConf {
+        transform: translate(220px, 110px);
+    }
 
-        #invalidReq {
-            color: red;
-            margin-bottom: 12px;
-        }
+    #invalidReq {
+        color: red;
+        margin-bottom: 12px;
+    }
 
-        .invalid-enter-from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
+    .invalid-enter-from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
 
-        .invalid-enter-active {
-            transition: all 0.3s ease-out;
-        }
+    .invalid-enter-active {
+        transition: all 0.3s ease-out;
+    }
 
-        .invalid-leave-to {
-            opacity: 0;
-            transform: translateY(30px);
-        }
+    .invalid-leave-to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
 
-        .invalid-leave-active {
-            transition: all 0.3s ease-in;
-        }
+    .invalid-leave-active {
+        transition: all 0.3s ease-in;
     }
 }
 </style>

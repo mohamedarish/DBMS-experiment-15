@@ -90,7 +90,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .listing {
     height: 15vh;
-    width: 60%;
+    width: 60vw;
     display: flex;
     flex-direction: row;
     padding: 10px;

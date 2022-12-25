@@ -1,9 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import LoginView from "../views/LoginView.vue";
-import NewHotelView from "../views/NewHotelView.vue";
-import OldHotelView from "../views/OldHotelView.vue";
-import RegisterView from "../views/RegisterView.vue";
 import ListingsView from "../views/ListingsView.vue";
 import BookedView from "../views/BookedView.vue";
 import ListedRooms from "../views/ListedRooms.vue";
@@ -19,22 +15,22 @@ const routes = [
     {
         path: "/login",
         name: "login",
-        component: LoginView,
+        component: HomeView,
     },
     {
         path: "/register",
         name: "register",
-        component: RegisterView,
+        component: HomeView,
     },
     {
         path: "/loginhotel",
         name: "loginhotel",
-        component: OldHotelView,
+        component: HomeView,
     },
     {
         path: "/registerhotel",
         name: "registerhotel",
-        component: NewHotelView,
+        component: HomeView,
     },
     {
         path: "/allrooms",

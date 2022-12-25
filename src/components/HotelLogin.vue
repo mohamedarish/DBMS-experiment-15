@@ -1,26 +1,25 @@
 <template>
-    <div class="login">
-        <form v-on:submit.prevent>
-            <p>Email</p>
-            <input type="email" name="name" id="name" placeholder="john@hotel.com" class="userInfo" required v-model="email"/>
-            <p>password:</p>
-            <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" class="userInfo" required v-model="pword"/>
-            <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
-            <Transition name="invalid">
-                <p id="invalidReq" v-if="invalidReq">Invalid email or Password</p>
-            </Transition>
-            <input type="submit" id="login" value="Login" @click="triggerLogin()"/>
+    <form v-on:submit.prevent>
+        <p>Email</p>
+        <input type="email" name="name" id="name" placeholder="john@hotel.com" class="userInfo" required v-model="email"/>
+        <p>password:</p>
+        <input type="password" name="password" id="password" placeholder="SuperSecurePassword" minlength="8" class="userInfo" required v-model="pword"/>
+        <input type="checkbox" name="showPass" id="showPass" :checked="checkboxState" @input="triggerPassword()" />
+        <Transition name="invalid">
+            <p id="invalidReq" v-if="invalidReq">Invalid email or Password</p>
+        </Transition>
+        <input type="submit" id="login" value="Login" @click="triggerLogin()"/>
 
-            <p>New to this site? <RouterLink to="./register">SignUp</RouterLink></p>
-            <p>Customer? <RouterLink to="./login">User Login</RouterLink></p>
-        </form>
-    </div>
+        <p>New to this site? <RouterLink to="./register">SignUp</RouterLink></p>
+        <p>Customer? <RouterLink to="./login">User Login</RouterLink></p>
+    </form>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
+import { useStore } from "vuex";
 export default defineComponent({
     components: {RouterLink},
     name: "HotelLogin",
@@ -43,6 +42,8 @@ export default defineComponent({
 
         const router = useRouter();
 
+        const store = useStore();
+
         const triggerLogin = ref(async () => {
             const config = {
                 headers: {
@@ -64,11 +65,7 @@ export default defineComponent({
                 if (!data) return;
 
                 if (data.name) {
-                    localStorage.setItem({
-                        email: data.email,
-                        name: data.name,
-                        type: "hotel"
-                    });
+                    store.commit("updateLogin", {name: data.name, email: data.email, type: "hotel"})
                     router.push("mylistings");
                 } else {
                     invalidReq.value = true;
@@ -97,104 +94,93 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.login {
-    height: calc(100vh - 64px);
-    background-image: url("https://www.gannett-cdn.com/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-
+form {
+    background: #eee;
+    height: 40%;
+    width: 35%;
     display: flex;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
 
-    form {
-        background: #eee;
-        height: 40%;
-        width: 35%;
+    p:nth-last-child(2) {
+        margin-top: 12px;
+    }
+
+    p {
+        width: 70%;
+        height: 7%;
         display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
+        align-items: flex-end;
+        justify-content: flex-start;
 
-        p:nth-last-child(2) {
-            margin-top: 12px;
+        a {
+            padding-left: 3px;
+            text-decoration-line: none;
+            color: #82500A;
+            text-decoration-color: #82500A;
         }
 
-        p {
-            width: 70%;
-            height: 7%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-start;
-
-            a {
-                padding-left: 3px;
-                text-decoration-line: none;
-                color: #82500A;
-                text-decoration-color: #82500A;
-            }
-
-            a:visited {
-                color: #82501B;
-                text-decoration-color: #82501B;
-            }
+        a:visited {
+            color: #82501B;
+            text-decoration-color: #82501B;
         }
+    }
 
-        .userInfo {
-            background-color: #eee;
-            border: none;
-            border-bottom: solid #777 0.2px;
-            width: 70%;
-            height: 10%;
-            font-size: 3vh;
-            box-decoration-break: none;
-            outline: none;
-            margin-bottom: 9px;
-        }
+    .userInfo {
+        background-color: #eee;
+        border: none;
+        border-bottom: solid #777 0.2px;
+        width: 70%;
+        height: 10%;
+        font-size: 3vh;
+        box-decoration-break: none;
+        outline: none;
+        margin-bottom: 9px;
+    }
 
-        .userInfo:focus {
-            border-bottom: solid #555 0.4px;
-            transition: all 0.5s ease-in-out;
-            background: #ddd;
-        }
+    .userInfo:focus {
+        border-bottom: solid #555 0.4px;
+        transition: all 0.5s ease-in-out;
+        background: #ddd;
+    }
 
-        #login {
-            width: 70%;
-            height: 15%;
-            background-color: #82500A;
-            color: #ccc;
-            font-size: 3vh;
-        }
+    #login {
+        width: 70%;
+        height: 15%;
+        background-color: #82500A;
+        color: #ccc;
+        font-size: 3vh;
+    }
 
-        #showPass {
-            width: 4vh;
-            height: 2vh;
-            position: absolute;
-            transform: translate(220px, -20px);
-        }
+    #showPass {
+        width: 4vh;
+        height: 2vh;
+        position: absolute;
+        transform: translate(220px, -20px);
+    }
 
-        #invalidReq {
-            color: red;
-            margin-bottom: 12px;
-        }
+    #invalidReq {
+        color: red;
+        margin-bottom: 12px;
+    }
 
-        .invalid-enter-from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
+    .invalid-enter-from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
 
-        .invalid-enter-active {
-            transition: all 0.3s ease-out;
-        }
+    .invalid-enter-active {
+        transition: all 0.3s ease-out;
+    }
 
-        .invalid-leave-to {
-            opacity: 0;
-            transform: translateY(30px);
-        }
+    .invalid-leave-to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
 
-        .invalid-leave-active {
-            transition: all 0.3s ease-in;
-        }
+    .invalid-leave-active {
+        transition: all 0.3s ease-in;
     }
 }
 </style>

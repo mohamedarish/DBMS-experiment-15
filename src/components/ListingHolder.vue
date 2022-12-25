@@ -3,7 +3,7 @@
     <div v-if="listings.length < 1">
         No Listings Currently Available
     </div>
-    <div v-else>
+    <div class="listings" v-else>
         <div v-for="room in listings" :key="room">
             <SingleListing :roomInfo="room"/>
         </div>
@@ -50,6 +50,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
+.listings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 
 </style>

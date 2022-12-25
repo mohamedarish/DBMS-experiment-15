@@ -21,6 +21,9 @@
                 <p>Room Desctiption</p>
                 <textarea name="description" id="description" cols="30" rows="10" class="userInfo" required />
 
+                <p>Room Type</p>
+                <input type="text" name="type" id="type" class="userInfo">
+
                 <p>Quoted Price</p>
                 <input type="number" name="price" id="price" class="userInfo" required />
 
@@ -51,7 +54,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .addroom {
-    width: 60%;
+    width: 60vw;
     margin: 10px;
 
     .newRoom {
@@ -63,7 +66,6 @@ export default defineComponent({
         align-items: center;
         background-color: #ccc;
         border-radius: 5px;
-        margin: 10px;
 
         .addSymbol {
             background-image: url("../assets/add.png");
@@ -103,6 +105,7 @@ export default defineComponent({
             outline: none;
             margin-bottom: 9px;
             padding: 5px;
+            border-radius: 8px;
         }
 
         #description {
@@ -117,7 +120,8 @@ export default defineComponent({
 
         #submit {
             width: 100%;
-            height: 14%;
+            border-radius: 8px;
+            height: 8%;
             background-color: #82500A;
             color: #ccc;
             font-size: 3vh;
