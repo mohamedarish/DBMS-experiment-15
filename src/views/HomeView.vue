@@ -25,8 +25,9 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import LoginBoxVue from "@/components/LoginBox.vue";
 import AddHotelVue from "@/components/AddHotel.vue";
 import HotelLoginVue from "@/components/HotelLogin.vue";
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed } from '@vue/runtime-core';
+import { useStore } from 'vuex';
 
 export default {
     name: 'HomeView',
@@ -34,6 +35,17 @@ export default {
         const route = useRoute();
 
         const currentPath = computed(() => route.path);
+
+        const store = useStore();
+
+        const user = store.state.user;
+
+        const router = useRouter();
+
+        if (user.name && route.path != "/") {
+            console.log("Redirecting");
+            router.push("allrooms");
+        }
 
         return {
             currentPath
