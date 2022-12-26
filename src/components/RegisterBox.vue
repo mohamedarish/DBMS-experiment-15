@@ -106,7 +106,7 @@ export default defineComponent({
                 if (data.email) {
                     store.commit("updateLogin", {name: data.name, email: data.email, type: "user", id: data.userID})
                     localStorage.setItem("UserData", JSON.stringify({
-                        name: data.name, email: data.email, type: "hotel", id: data.userID
+                        name: data.name, email: data.email, type: "user", id: data.userID
                     }))
                     router.push("allrooms");
                 } else {

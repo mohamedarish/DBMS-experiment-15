@@ -1,10 +1,10 @@
 <template>
     <div class="listing">
-        <div class="main-image" :id="roomInfo.id"></div>
+        <div class="main-image" :id="roomInfo.roomID"></div>
         <div class="details-holder">
             <div class="name-rating">
                 <div class="hotel-name">{{ roomInfo.name }}</div>
-                <div class="rating" :id="roomInfo.id">
+                <div class="rating" :id="roomInfo.roomID">
                     {{ roomInfo.rating }} ★ <p>{{ roomInfo.number_of_reviews ? roomInfo.number_of_reviews : "no" }} reviews</p>
                 </div>
             </div>
@@ -48,13 +48,13 @@ export default defineComponent({
             const rating_box = ref(document.querySelectorAll(".rating"));
 
             img_holder.value.forEach(entry => {
-                if (entry.id.includes(props.roomInfo.id.toString())) {
-                    entry.style.backgroundImage = `url("${ props.roomInfo.images[0] }")`
+                if (entry.id.includes(props.roomInfo.roomID.toString())) {
+                    entry.style.backgroundImage = `url("${ props.roomInfo.image }")`
                 }
             })
 
             rating_box.value.forEach(entry => {
-                if (entry.id.includes(props.roomInfo.id.toString())) {
+                if (entry.id.includes(props.roomInfo.roomID.toString())) {
                     if (props.roomInfo.rating > 3) {
                         entry.style.backgroundColor = "green";
                     } else if (props.roomInfo.rating > 2) {
@@ -69,7 +69,7 @@ export default defineComponent({
         const router = useRouter();
 
         const viewDeatiled = ref(() => {
-            router.push(`room:${ props.roomInfo.id }`);
+            router.push(`room:${ props.roomInfo.roomID }`);
         })
 
         return {

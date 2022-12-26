@@ -2,18 +2,18 @@
     <div class="review">
         <div class="row1">
             <div class="user">
-                {{ review.user }}
+                {{ review.customer.name }}
             </div>
             <div class="rate">
-                {{ review.rate }} ⭐️
+                {{ review.review }} ⭐️
             </div>
         </div>
         <div class="row2">
-            <p>{{ review.head }}</p>
+            <p>{{ review.title }}</p>
         </div>
         <div class="row3">
-            <p v-if="!fullRevFlag && review.content.length > 500">{{ review.content.substring(0, 500) }} <b @click="triggerFullReview">Read More...</b></p>
-            <p v-else @click="triggerFullReview()">{{ review.content }}</p>
+            <p v-if="!fullRevFlag && review.description.length > 500">{{ review.description.substring(0, 500) }} <b @click="triggerFullReview">Read More...</b></p>
+            <p v-else @click="triggerFullReview()">{{ review.description }}</p>
         </div>
     </div>
 </template>

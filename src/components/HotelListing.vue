@@ -61,8 +61,6 @@ export default defineComponent({
 
                 if (!data) return;
 
-                console.log(data);
-
                 if (data.report) {
                     router.go();
                 }

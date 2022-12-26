@@ -30,14 +30,14 @@
                     <p>{{ roomInfo.address }}</p>
                 </div>
             </div>
-            <div class="booker">
+            <div class="booker" v-if="!bookFlag">
                 <div class="top">
                     <div class="listPrice">
                         <div class="label">
                             Original Price:
                         </div>
                         <div class="OPrice">
-                            {{ parseInt(roomInfo.price.split()[0]) }}
+                            {{ roomInfo.price.toFixed(2) }}
                         </div>
                     </div>
                     <div class="tax">
@@ -45,7 +45,7 @@
                             Tax (30%)
                         </div>
                         <div class="taxAmt">
-                            {{ (parseInt(roomInfo.price.split()[0]) * 0.3).toFixed(2) }}
+                            {{ (roomInfo.price * 0.3).toFixed(2) }}
                         </div>
                     </div>
                 </div>
@@ -55,17 +55,21 @@
                             Total
                         </div>
                         <div class="totalP">
-                            {{ (parseInt(roomInfo.price.split()[0]) * 1.3).toFixed(2) }}
+                            {{ (roomInfo.price * 1.3).toFixed(2) }}
                         </div>
                     </div>
                     <div class="payer">
-                        <button class="pay" @click="triggerBook()">Pay & Book</button>
+                        <button class="pay" @click="triggerBookFlag()">Pay & Book</button>
                     </div>
                 </div>
             </div>
+            <BookerBoxVue :amount="roomInfo.price" :hotelID="roomInfo.hotelID" v-else/>
         </div>
         <div class="reviews">
-            <div class="review-holder" v-for="review in reviews" :key="review">
+            <div class="review-holder" v-if="reviews.length < 1">
+                No Reviews
+            </div>
+            <div class="review-holder" v-else v-for="review in reviews" :key="review">
                 <ReviewHolderVue class="review" :review="review"/>
             </div>
         </div>
@@ -73,19 +77,72 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import ReviewHolderVue from './ReviewHolder.vue';
+import axios from 'axios';
+import BookerBoxVue from "./BookerBox.vue";
 export default defineComponent({
-    components: { ReviewHolderVue },
-    props: ["roomInfo", "available"],
-    setup(props) {
-        let firstImg = ref(null);
-        let secondImg = ref(null);
-        let thirdImg = ref(null);
+    components: { ReviewHolderVue, BookerBoxVue },
+    async setup() {
+        const route = useRoute();
 
+        const roomID = parseInt(route.params.id.slice(1));
+
+        let roomInfo;
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+
+        const server_url = process.env.VUE_APP_SERVER;
+
+        let reviews = ref([]);
+
+        try {
+            const { data } = await axios.post(`${ server_url }viewreview`, {
+                roomID,
+            }, config);
+
+            if (!data.reviews) {
+                throw Error("Reviews not found");
+            }
+
+            reviews = data.reviews;
+        } catch (error) {
+            reviews = ref([]);
+        }
+
+        try {
+            const { data } = await axios.post(`${ server_url }oneroom`, {
+                roomID,
+            }, config);
+
+            if (!data.room) {
+                throw Error("Room not found");
+            }
+
+            roomInfo = data.room;
+        } catch(error) {
+            roomInfo = ref({
+                roomID: 0,
+                name: "Not Found",
+                description: "Failed to load the room",
+                price: -1,
+                type: "Not found",
+                address: "MissingNo",
+                rating: 6,
+                number_of_reviews: -1,
+                images: ["https://static.wikia.nocookie.net/fcoc-vs-battles/images/e/e0/MissingNo.1.png/revision/latest?cb=20200404195127"]
+            })
+        }
 
         const replaceMain = ref((num) => {
+            const firstImg = ref(document.querySelector(".first-img"));
+            const secondImg = ref(document.querySelector(".second-img"));
+            const thirdImg = ref(document.querySelector(".third-img"));
             if (num == 2) {
                 const tempSrc = secondImg.value.style.backgroundImage;
                 secondImg.value.style.backgroundImage = firstImg.value.style.backgroundImage;
@@ -97,79 +154,42 @@ export default defineComponent({
             }
         })
 
-        onMounted(() => {
-            firstImg = ref(document.querySelector(".first-img"));
-            secondImg = ref(document.querySelector(".second-img"));
-            thirdImg = ref(document.querySelector(".third-img"));
-
-            if (firstImg.value) {
-                firstImg.value.style.backgroundImage = `url("${props.roomInfo.images[0]}")`;
-            }
-
-            if (secondImg.value) {
-                secondImg.value.style.backgroundImage = `url("${props.roomInfo.images[1]}")`;
-            }
-
-            if (thirdImg.value) {
-                thirdImg.value.style.backgroundImage = `url("${props.roomInfo.images[2]}")`;
-            }
-        })
-
-        const reviews = ref([
-            {
-                id: 1,
-                rate: 2,
-                head: "bad",
-                content: "very bad",
-                user: "anon"
-            },
-            {
-                id: 2,
-                rate: 4,
-                head: "ok",
-                content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent lacinia venenatis imperdiet. Aliquam erat volutpat. Aenean tempus velit turpis. Ut sagittis, diam et accumsan imperdiet, ipsum diam viverra nibh, luctus sagittis risus ex at dolor. Fusce nunc leo, posuere eget enim pellentesque, dignissim accumsan leo. Aliquam eleifend odio quam, id efficitur orci pretium ac. Phasellus maximus ac leo sed egestas.\
-Donec quis metus et eros eleifend ullamcorper pharetra id nulla. In ac lorem magna. Aenean pharetra metus nunc, id malesuada ex auctor a. Sed eu viverra enim, vitae mollis nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus mollis nec mauris et aliquam. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur sodales lacus non mi interdum, a euismod quam sodales. Pellentesque accumsan consectetur mauris eu posuere. Nulla commodo enim ac orci malesuada venenatis.\
-Nullam volutpat fermentum purus non pellentesque. Fusce pretium lorem purus, vitae scelerisque tortor laoreet quis. Mauris nibh sem, aliquam eget nulla quis, accumsan auctor velit. Suspendisse porta blandit elit, at ullamcorper ex egestas et. Etiam pellentesque felis at purus gravida placerat. Sed hendrerit ut enim non sodales. Donec eu lectus auctor, pretium velit eu, convallis mi.\
-Proin ut malesuada turpis. In et luctus est. Maecenas est lectus, lacinia tempus turpis ut, imperdiet mollis risus. Etiam ut erat sed odio aliquet pellentesque nec at elit. Pellentesque ultricies lacus sit amet dui scelerisque congue. Sed ac placerat mi, et rhoncus nibh. Curabitur ut justo ac nulla blandit gravida non id quam. Nulla sagittis et nisi ut gravida. Mauris lacinia dui a neque consequat scelerisque nec vitae mi. Vestibulum tincidunt ipsum et est faucibus, eu dictum lorem consectetur. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam ultrices ligula at neque tincidunt porttitor. Praesent pellentesque vestibulum mauris, eget placerat odio feugiat vel. Vivamus congue, odio nec porttitor dapibus, velit quam ornare mi, sed ullamcorper sapien nisl ac velit. Etiam lacinia consequat ultricies. Aliquam fermentum ligula diam, quis pretium urna congue quis.\
-Maecenas sit amet dignissim elit. Donec in leo sit amet arcu ullamcorper accumsan. Aenean porttitor ante imperdiet leo interdum aliquet. Aenean in dui lacinia, egestas libero in, sagittis risus. Fusce commodo imperdiet lorem sed scelerisque. Mauris sit amet enim at risus pellentesque sodales a eu libero. Fusce nec ante non nunc gravida congue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam facilisis tellus in molestie tempor. Nam vulputate congue urna. Quisque sit amet consectetur ligula. Proin id odio eu arcu accumsan vehicula. Quisque semper blandit massa sit amet facilisis. Aenean bibendum vel lacus vel cursus.",
-                user: "not anon"
-            },
-            {
-                id: 3,
-                rate: 5,
-                head: "nice",
-                content: "It's a nice hotel",
-                user: "Very anon"
-            },
-            {
-                id: 4,
-                rate: 1,
-                head: "very bad",
-                content: "Vey bad hotel",
-                user: "cool person"
-            },
-            {
-                id: 5,
-                rate: 3,
-                head: "sub-par",
-                content: "It's just below okay but not very bad",
-                user: "guy"
-            }
-        ])
-
-        const router = useRouter();
-
-        const triggerBook = ref(() => {
-            router.push("bookings")
-        })
+        console.log(roomInfo);
 
         return {
             replaceMain,
-            triggerBook,
-            reviews
+            reviews,
+            roomInfo,
         }
     },
-    name: "RoomDetailed"
+    name: "RoomDetailed",
+    mounted() {
+        const firstImg = document.querySelector(".first-img");
+        const secondImg = document.querySelector(".second-img");
+        const thirdImg = document.querySelector(".third-img");
+
+        if (firstImg) {
+            firstImg.style.backgroundImage = `url("${this.roomInfo.images[0]}")`;
+        }
+
+        if (secondImg) {
+            secondImg.style.backgroundImage = `url("${this.roomInfo.images[1]}")`;
+        }
+
+        if (thirdImg) {
+            thirdImg.style.backgroundImage = `url("${this.roomInfo.images[2]}")`;
+        }
+    },
+    data() {
+        return {
+            bookFlag: false,
+        }
+    },
+    methods: {
+        triggerBookFlag() {
+            this.bookFlag = !this.bookFlag;
+        }
+    }
 })
 </script>
 

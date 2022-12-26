@@ -1,19 +1,19 @@
 <template>
     <div class="listing">
-        <div class="main-image" :id="roomInfo.id"></div>
+        <div class="main-image" :id="bookingInfo.bookingID"></div>
         <div class="details-holder">
             <div class="name-rating">
-                <div class="hotel-name">{{ roomInfo.name }}</div>
-                <div class="rating" :id="roomInfo.id">
-                    {{ roomInfo.rating }} ★ <p>{{ roomInfo.number_of_reviews ? roomInfo.number_of_reviews : "no" }} reviews</p>
+                <div class="hotel-name">{{ bookingInfo.name }}</div>
+                <div class="rating" :id="bookingInfo.bookingID">
+                    {{ bookingInfo.rating }} ★ <p>{{ bookingInfo.number_of_reviews ? bookingInfo.number_of_reviews : "no" }} reviews</p>
                 </div>
             </div>
             <div class="type-address">
-                <div class="type">{{ roomInfo.type }}</div>
-                <div class="address">{{ roomInfo.address }}</div>
+                <div class="type">{{ bookingInfo.type }}</div>
+                <div class="address">{{ bookingInfo.address }}</div>
             </div>
             <div class="price-booking">
-                <div class="price">{{ roomInfo.price }}</div>
+                <div class="price">{{ bookingInfo.price }}</div>
                 <button class="rate">Rate Now</button>
             </div>
         </div>
@@ -23,7 +23,7 @@
 <script>
 import { defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
-    props: ["roomInfo"],
+    props: ["bookingInfo"],
     setup(props) {
         const makePopupAppear = ref(false);
         const leaveReview = ref(false);
@@ -47,16 +47,16 @@ export default defineComponent({
             const rating_box = ref(document.querySelectorAll(".rating"));
 
             img_holder.value.forEach(entry => {
-                if (entry.id.includes(props.roomInfo.id.toString())) {
-                    entry.style.backgroundImage = `url("${ props.roomInfo.images[0] }")`
+                if (entry.id.includes(props.bookingInfo.bookingID.toString())) {
+                    entry.style.backgroundImage = `url("${ props.bookingInfo.image }")`
                 }
             })
 
             rating_box.value.forEach(entry => {
-                if (entry.id.includes(props.roomInfo.id.toString())) {
-                    if (props.roomInfo.rating > 3) {
+                if (entry.id.includes(props.bookingInfo.bookingID.toString())) {
+                    if (props.bookingInfo.rating > 3) {
                         entry.style.backgroundColor = "green";
-                    } else if (props.roomInfo.rating > 2) {
+                    } else if (props.bookingInfo.rating > 2) {
                         entry.style.backgroundColor = "yellow";
                     } else {
                         entry.style.backgroundColor = "red";

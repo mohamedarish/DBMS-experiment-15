@@ -6,74 +6,72 @@
         </div>
         <div v-else>
             <div v-for="room in bookedRooms" :key="room">
-                <BookedListingVue :roomInfo="room"/>
+                <BookedListingVue :bookingInfo="room"/>
             </div>
         </div>
 
         <div class="header-text">Previous Bookings</div>
-        <div v-if="oldRooms.length > 0">
+        <div v-if="oldRooms.length < 1">
+            No Bookings :(
+        </div>
+        <div v-else>
             <div v-for="old in oldRooms" :key="old">
-                <PreviousListingVue :roomInfo="old" />
+                <PreviousListingVue :bookingInfo="old" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 import { defineComponent, ref } from 'vue';
+import { useStore } from 'vuex';
 import BookedListingVue from './BookedListing.vue';
 import PreviousListingVue from './PreviousListing.vue';
 export default defineComponent({
-    setup() {
-        const bookedRooms = ref([
-            {
-                id: 12,
-                name: "Aussie-innit",
-                description: "It's australia innit?",
-                price: "6",
-                type: "Single Mouse",
-                address: "New Zealand",
-                rating: 4,
-                number_of_reviews: 2,
-                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
+    async setup() {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
             },
-            {
-                id: 14,
-                name: "NewZie-innit",
-                description: "It's new zealand innit?",
-                price: "6",
-                type: "Triple Mouse",
-                address: "Australia",
-                rating: 1,
-                number_of_reviews: 5,
-                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
-            }
-        ]);
+        }
 
-        const oldRooms = ref([
-            {
-                id: 12,
-                name: "Aussie-innit",
-                description: "It's australia innit?",
-                price: "6",
-                type: "Single Mouse",
-                address: "New Zealand",
-                rating: 4,
-                number_of_reviews: 2,
-                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
-            },
-            {
-                id: 14,
-                name: "NewZie-innit",
-                description: "It's new zealand innit?",
-                price: "6",
-                type: "Triple Mouse",
-                address: "Australia",
-                rating: 1,
-                number_of_reviews: 5,
-                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
+        let oldRooms;
+        let bookedRooms;
+
+        const server_url = process.env.VUE_APP_SERVER;
+
+        const store = useStore();
+
+        const user = store.state.user;
+
+        try {
+            const { data } = await axios.post(`${ server_url }oldbookings`, {
+                customerID: user.id,
+                currentDate: new Date(),
+            }, config)
+            if (!data.rooms) {
+                throw Error("No listings");
             }
-        ]);
+            oldRooms = ref(data.rooms);
+        } catch (_error) {
+            oldRooms = ref([]);
+        }
+
+        try {
+            const { data } = await axios.post(`${ server_url }currentbookings`, {
+                customerID: user.id,
+                currentDate: new Date(),
+            }, config)
+
+            if (!data.rooms) {
+                throw Error("No listings");
+            }
+
+            bookedRooms = ref(data.rooms);
+        } catch (_error) {
+            bookedRooms = ref([]);
+        }
 
         return {
             bookedRooms,

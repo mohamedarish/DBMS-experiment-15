@@ -43,7 +43,6 @@ export default {
         const router = useRouter();
 
         if (user.name && route.path != "/") {
-            console.log("Redirecting");
             router.push("allrooms");
         }
 

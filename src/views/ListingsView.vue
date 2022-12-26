@@ -1,7 +1,13 @@
 <template>
     <div class="home">
-        <!-- render? -->
-        <ListingHolderVue />
+        <Suspense>
+            <template #default>
+                <ListingHolderVue />
+            </template>
+            <template #fallback>
+                Loading...
+            </template>
+        </Suspense>
     </div>
 </template>
 
