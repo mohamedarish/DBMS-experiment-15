@@ -37,7 +37,7 @@ export default {
 
         const store = useStore();
 
-        const localStorageData = JSON.parse(localStorage.getItem("UserData")) ? JSON.parse(localStorage.getItem("UserData")) : {name: "", email: "", type: ""};
+        const localStorageData = JSON.parse(localStorage.getItem("UserData")) ? JSON.parse(localStorage.getItem("UserData")) : {name: "", email: "", type: "", id: 0};
 
         store.commit("updateLogin", localStorageData);
 
@@ -46,7 +46,7 @@ export default {
         const router = ref(useRouter());
 
         const logOut = ref(() => {
-            store.commit("updateLogin", {name: "", email: "", type: ""});
+            store.commit("updateLogin", {name: "", email: "", type: "", id: 0});
             localStorage.removeItem("UserData");
             router.value.push({path: "/"});
         })

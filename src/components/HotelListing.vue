@@ -1,10 +1,10 @@
 <template>
     <div class="listing">
-        <div class="main-image" :id="roomInfo.id"></div>
+        <div class="main-image" :id="roomInfo.roomID"></div>
         <div class="details-holder">
             <div class="name-rating">
                 <div class="hotel-name">{{ roomInfo.name }}</div>
-                <div class="rating" :id="roomInfo.id">
+                <div class="rating" :id="roomInfo.roomID">
                     {{ roomInfo.rating }} ★ <p>{{ roomInfo.number_of_reviews ? roomInfo.number_of_reviews : "no" }} reviews</p>
                 </div>
             </div>
@@ -14,14 +14,16 @@
             </div>
             <div class="price-booking">
                 <div class="price">{{ roomInfo.price }}</div>
-                <button class="remove">Remove Listing</button>
+                <button class="remove" @click="removeListing()">Remove Listing</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 import { defineComponent, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 export default defineComponent({
     props: ["roomInfo"],
     setup(props) {
@@ -41,19 +43,47 @@ export default defineComponent({
             confirmRemove.value = !confirmRemove.value;
         })
 
+        const router = useRouter();
+
+        const removeListing = ref(async () => {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+
+            try {
+                const server_url = process.env.VUE_APP_SERVER;
+
+                const { data } = await axios.post(`${ server_url }removeroom`, {
+                    roomID: props.roomInfo.roomID
+                }, config);
+
+                if (!data) return;
+
+                console.log(data);
+
+                if (data.report) {
+                    router.go();
+                }
+            } catch (_error) {
+                return;
+            }
+        })
+
 
         onMounted(() => {
             const img_holder = ref(document.querySelectorAll(".main-image"));
             const rating_box = ref(document.querySelectorAll(".rating"));
 
             img_holder.value.forEach(entry => {
-                if (entry.id.includes(props.roomInfo.id.toString())) {
-                    entry.style.backgroundImage = `url("${ props.roomInfo.images[0] }")`
+                if (entry.id.includes(props.roomInfo.roomID.toString())) {
+                    entry.style.backgroundImage = `url("${ props.roomInfo.image }")`
                 }
             })
 
             rating_box.value.forEach(entry => {
-                if (entry.id.includes(props.roomInfo.id.toString())) {
+                if (entry.id.includes(props.roomInfo.roomID.toString())) {
                     if (props.roomInfo.rating > 3) {
                         entry.style.backgroundColor = "green";
                     } else if (props.roomInfo.rating > 2) {
@@ -72,6 +102,7 @@ export default defineComponent({
             triggerReview,
             confirmRemove,
             triggerConfirm,
+            removeListing
         }
 
     },

@@ -91,7 +91,9 @@ export default defineComponent({
             }
 
             try {
-                const { data } = await axios.post("http://localhost:8000/api/user/register", {
+                const server_url = process.env.VUE_APP_SERVER;
+
+                const { data } = await axios.post(`${ server_url }register`, {
                     email: email.value,
                     name: name.value,
                     DOB: new Date(DOB.value),
@@ -102,9 +104,9 @@ export default defineComponent({
                 if (!data) return;
 
                 if (data.email) {
-                    store.commit("updateLogin", {name: data.name, email: data.email, type: "user"})
+                    store.commit("updateLogin", {name: data.name, email: data.email, type: "user", id: data.userID})
                     localStorage.setItem("UserData", JSON.stringify({
-                        name: data.name, email: data.email, type: "hotel"
+                        name: data.name, email: data.email, type: "hotel", id: data.userID
                     }))
                     router.push("allrooms");
                 } else {

@@ -6,6 +6,7 @@ const store = createStore({
             name: "",
             email: "",
             type: "",
+            id: 0,
         },
     },
     mutations: {
@@ -13,6 +14,7 @@ const store = createStore({
             state.user.name = payload.name;
             state.user.email = payload.email;
             state.user.type = payload.type;
+            state.user.id = payload.id;
         },
     },
 });

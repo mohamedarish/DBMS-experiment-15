@@ -19,7 +19,7 @@ export default defineComponent({
 
         const user = store.state.user;
 
-        if (!user.name) {
+        if (!user.name || user.type != "user") {
             router.push({path: "/"});
         }
     },

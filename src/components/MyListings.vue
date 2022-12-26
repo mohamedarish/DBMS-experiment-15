@@ -1,5 +1,5 @@
 <template>
-    <div v-if="listedRooms.length < 1">
+    <div class="listings" v-if="listedRooms.length < 1">
         <div class="noListing">No listings added yet yet</div>
         <AddRoomVue />
     </div>
@@ -12,42 +12,43 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import HotelListingVue from './HotelListing.vue';
 import AddRoomVue from './AddRoom.vue';
+import { useStore } from 'vuex';
+import axios from 'axios';
 
 export default defineComponent({
-    setup() {
-        const listedRooms = ref([
-            {
-                id: 12,
-                name: "Aussie-innit",
-                description: "It's australia innit?",
-                price: "6",
-                type: "Single Mouse",
-                address: "New Zealand",
-                rating: 5,
-                number_of_reviews: 100,
-                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
+    name: "MyListings",
+    async setup() {
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
             },
-            {
-                id: 14,
-                name: "NewZie-innit",
-                description: "It's new zealand innit?",
-                price: "6",
-                type: "Triple Mouse",
-                address: "Australia",
-                rating: 0,
-                number_of_reviews: 0,
-                images: ["https://www.goseewrite.com/wp-content/uploads/2011/01/bad-manangue-hotel.jpg"]
-            }
-        ]);
+        }
+
+        const server_url = process.env.VUE_APP_SERVER;
+
+        const store = useStore();
+
+        const user = store.state.user;
+
+        let listedRooms;
+
+        try {
+            const { data } = await axios.post(`${ server_url }myrooms`, {
+                hotelID: user.id,
+            }, config);
+
+            listedRooms = data.rooms;
+        } catch (_error) {
+            listedRooms = [];
+        }
 
         return {
             listedRooms
         }
     },
-    name: "MyListings",
     components: {
         HotelListingVue,
         AddRoomVue

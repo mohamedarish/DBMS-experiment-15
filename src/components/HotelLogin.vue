@@ -20,6 +20,7 @@ import { defineComponent, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import axios from "axios";
 import { useStore } from "vuex";
+
 export default defineComponent({
     components: {RouterLink},
     name: "HotelLogin",
@@ -57,7 +58,9 @@ export default defineComponent({
             }
 
             try {
-                const {data} = await axios.post("http://localhost:8000/api/user/loginhotel", {
+                const server_url = process.env.VUE_APP_SERVER;
+
+                const {data} = await axios.post(`${ server_url }loginhotel`, {
                     email: email.value,
                     password: pword.value,
                 }, config);
@@ -65,9 +68,9 @@ export default defineComponent({
                 if (!data) return;
 
                 if (data.name) {
-                    store.commit("updateLogin", {name: data.name, email: data.email, type: "hotel"})
+                    store.commit("updateLogin", {name: data.name, email: data.email, type: "hotel", id: data.userID})
                     localStorage.setItem("UserData", JSON.stringify({
-                        name: data.name, email: data.email, type: "hotel"
+                        name: data.name, email: data.email, type: "hotel", id: data.userID
                     }))
                     router.push("mylistings");
                 } else {

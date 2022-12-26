@@ -1,7 +1,14 @@
 <template>
     <div class="home">
         <!-- render? -->
-        <MyListingsVue />
+        <Suspense>
+            <template #default>
+                <MyListingsVue/>
+            </template>
+            <template #fallback>
+                Loading...
+            </template>
+        </Suspense>
     </div>
 </template>
 
@@ -18,12 +25,12 @@ export default defineComponent({
 
         const user = store.state.user;
 
-        if (!user.name) {
+        if (!user.name || user.type == "user") {
             router.push({path: "/"});
         }
     },
     components: {
-        MyListingsVue,
+        MyListingsVue
     }
 });
 </script>
