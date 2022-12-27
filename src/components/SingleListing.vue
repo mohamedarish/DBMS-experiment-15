@@ -58,7 +58,7 @@ export default defineComponent({
                     if (props.roomInfo.rating > 3) {
                         entry.style.backgroundColor = "green";
                     } else if (props.roomInfo.rating > 2) {
-                        entry.style.backgroundColor = "yellow";
+                        entry.style.backgroundColor = "#82500A";
                     } else {
                         entry.style.backgroundColor = "red";
                     }
