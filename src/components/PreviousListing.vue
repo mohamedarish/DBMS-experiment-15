@@ -117,7 +117,6 @@ export default defineComponent({
                     router.go();
                 }
             } catch (_error) {
-                console.error(_error);
                 return;
             }
         })
