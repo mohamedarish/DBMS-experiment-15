@@ -17,7 +17,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 export default defineComponent({
     props: ["amount", "hotelID"],
-    name: "BookerBox",
+    name: "BookingMenu",
     setup(props) {
         const checkIn = ref("");
         const checkOut = ref("");

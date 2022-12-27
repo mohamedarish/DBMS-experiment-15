@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            <BookerBoxVue :amount="roomInfo.price" :hotelID="roomInfo.hotelID" v-else/>
+            <BookingMenu :amount="roomInfo.price" :hotelID="roomInfo.hotelID" v-else/>
         </div>
         <div class="reviews">
             <div class="review-holder" v-if="reviews.length < 1">
@@ -81,9 +81,10 @@ import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import ReviewHolderVue from './ReviewHolder.vue';
 import axios from 'axios';
-import BookerBoxVue from "./BookerBox.vue";
+import BookingMenu from "./BookingMenu.vue"
+
 export default defineComponent({
-    components: { ReviewHolderVue, BookerBoxVue },
+    components: { ReviewHolderVue, BookingMenu },
     async setup() {
         const route = useRoute();
 
