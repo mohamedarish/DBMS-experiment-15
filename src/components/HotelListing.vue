@@ -185,6 +185,7 @@ export default defineComponent({
                 padding: 7px;
                 border: none;
                 font-size: x-large;
+                cursor: pointer;
             }
         }
     }

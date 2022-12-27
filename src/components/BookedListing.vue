@@ -3,9 +3,11 @@
         <div class="main-image" :id="bookingInfo.bookingID"></div>
         <div class="details-holder">
             <div class="name-rating">
-                <div class="hotel-name">{{ bookingInfo.name }}</div>
+                <RouterLink :to="roomLink">
+                    <div class="hotel-name">{{ bookingInfo.name }}</div>
+                </RouterLink>
                 <div class="rating" :id="bookingInfo.bookingID">
-                    {{ bookingInfo.rating }} ★ <p>{{ bookingInfo.number_of_reviews ? bookingInfo.number_of_reviews : "no" }} reviews</p>
+                    {{ bookingInfo.checkinDate.slice(0, 10) }}
                 </div>
             </div>
             <div class="type-address">
@@ -13,7 +15,7 @@
                 <div class="address">{{ bookingInfo.address }}</div>
             </div>
             <div class="price-booking">
-                <div class="price">{{ bookingInfo.price }}</div>
+                <div class="price">{{ bookingInfo.checkoutDate.slice(0,10) }}</div>
                 <button class="cancel" @click="cancelBooking()">Cancel Booking</button>
             </div>
         </div>
@@ -21,13 +23,18 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { defineComponent, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { RouterLink } from 'vue-router';
 export default defineComponent({
     props: ["bookingInfo"],
     setup(props) {
         const makePopupAppear = ref(false);
         const leaveReview = ref(false);
         const confirmRemove = ref(false);
+
+        const roomLink = ref(`./room:${ props.bookingInfo.roomID }`)
 
         const triggerPopUp = ref(() => {
             makePopupAppear.value = !makePopupAppear.value;
@@ -41,6 +48,8 @@ export default defineComponent({
             confirmRemove.value = !confirmRemove.value;
         })
 
+        const router = useRouter();
+
 
         const cancelBooking = ref(async () => {
             const config = {
@@ -53,7 +62,7 @@ export default defineComponent({
                 const server_url = process.env.VUE_APP_SERVER;
 
                 const { data } = await axios.post(`${ server_url }cancelbooking`, {
-                    bookingID: bookingInfo.bookingID
+                    bookingID: props.bookingInfo.bookingID
                 }, config);
 
                 if (!data) return;
@@ -68,23 +77,10 @@ export default defineComponent({
 
         onMounted(() => {
             const img_holder = ref(document.querySelectorAll(".main-image"));
-            const rating_box = ref(document.querySelectorAll(".rating"));
 
             img_holder.value.forEach(entry => {
                 if (entry.id.includes(props.bookingInfo.bookingID.toString())) {
                     entry.style.backgroundImage = `url("${ props.bookingInfo.image }")`
-                }
-            })
-
-            rating_box.value.forEach(entry => {
-                if (entry.id.includes(props.bookingInfo.bookingID.toString())) {
-                    if (props.bookingInfo.rating > 3) {
-                        entry.style.backgroundColor = "green";
-                    } else if (props.bookingInfo.rating > 2) {
-                        entry.style.backgroundColor = "yellow";
-                    } else {
-                        entry.style.backgroundColor = "red";
-                    }
                 }
             })
         });
@@ -97,6 +93,7 @@ export default defineComponent({
             confirmRemove,
             triggerConfirm,
             cancelBooking,
+            roomLink,
         }
 
     },
@@ -140,8 +137,6 @@ export default defineComponent({
             }
 
             .rating {
-                background: #82500A;
-                color: #fff;
                 width: max-content;
                 padding: 4px;
                 height: ma;
@@ -181,8 +176,18 @@ export default defineComponent({
                 padding: 7px;
                 border: none;
                 font-size: x-large;
+                cursor: pointer;
             }
         }
+    }
+}
+
+a {
+    text-decoration: none;
+
+    &:visited {
+        text-decoration: none;
+        color: #2C3E50;
     }
 }
 </style>

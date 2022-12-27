@@ -38,10 +38,6 @@ export default defineComponent({
             try {
                 const server_url = process.env.VUE_APP_SERVER;
 
-                console.log(server_url);
-
-                console.log(roomID, user.id, new Date(), new Date(checkIn.value), new Date(checkOut.value), props.amount);
-
                 const { data } = await axios.post(`${ server_url }bookroom`, {
                     roomID: roomID,
                     customerID: user.id,
@@ -52,15 +48,12 @@ export default defineComponent({
                     hotelID: props.hotelID,
                 }, config);
 
-                console.log("data");
-
                 if (!data) return;
 
                 if (data.report) {
                     router.push("bookings");
                 }
             } catch (_error) {
-                console.log(_error);
                 return;
             }
         });

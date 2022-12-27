@@ -198,6 +198,7 @@ export default defineComponent({
             background-color: #82500A;
             color: #ccc;
             font-size: 3vh;
+            cursor: pointer;
         }
 
         #invalidReq {

@@ -155,8 +155,6 @@ export default defineComponent({
             }
         })
 
-        console.log(roomInfo);
-
         return {
             replaceMain,
             reviews,
@@ -381,6 +379,7 @@ export default defineComponent({
                         border: solic #999 2px;
                         color: #333;
                         font-size: 2vh;
+                        cursor: pointer;
                     }
                 }
             }
